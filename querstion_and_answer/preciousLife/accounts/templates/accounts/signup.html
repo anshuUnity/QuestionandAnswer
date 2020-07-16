@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  body{
+    background: url("{% static 'accounts/images/positive_vibes.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    margin-left: auto;
+  }
+</style>
+
+<div class="container signup_main_div">
+  <h1>Sign Up</h1>
+  <div class="form-sign-up">
+    <form method="POST">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input type="submit" value="Sign Up" class="signup-button">
+    </form>  
+  </div>
+</div>
+
+{% endblock %}
