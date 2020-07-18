@@ -12,19 +12,27 @@
        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
-   <link rel="stylesheet" href="{% static 'accounts/css/master.css' %}">
+   <link rel="stylesheet" href="{% static 'preciousLife/css/master.css' %}">
 
    <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
 
    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 </head>
 
 <style>
     nav{
         background: #272930;
     }
+
+    body{
+        font-family: 'open sans', Arial, sans-serif;
+        background: #f2f2f2;
+    }
+
 </style>
 
 <body>
@@ -43,6 +51,7 @@
                 <li><a  href="#">Contact Us</a></li>
                 <li><a  href="#">Blog</a></li>
                 <li><a  href="{% url 'accounts:logout' %}">Logout</a></li>
+                <li><a href="{% url 'questions_answer:create' %}">Create</a></li>
             
                 {% else %}
                 <li><a  href="#">About Us</a></li>
@@ -50,6 +59,7 @@
                 <li><a  href="#">Blog</a></li>
                 <li><a  href="{% url 'accounts:login' %}">Login</a></li>
                 <li><a  href="{% url 'accounts:register' %}">Sign Up</a></li>
+                <li><a href="{% url 'questions_answer:create' %}">Create</a></li>
             
                 {% endif %}
             

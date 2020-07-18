@@ -2,6 +2,23 @@
 {% load static %}
 {% block content %}
 
-<h1 class="welcome">Welcome to PreciousLife.com</h1>
+<style>
+    .question-list-main-div{
+        width: 700px;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+        background: white;
+        padding: 20px;
+        margin: 10% auto 0;
+    }
+</style>
+
+
+<div class="question-list-main-div">
+    {% for questions in object_list %}
+    <!-- <h3>{{ questions.description | safe }}</h3> -->
+    <div class="question_list_div">{{ questions.description | safe }}</div>
+    <hr>
+    {% endfor %}
+</div>
 
 {% endblock %}

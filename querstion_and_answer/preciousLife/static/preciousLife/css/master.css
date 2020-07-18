@@ -1,0 +1,164 @@
+
+body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.welcome{
+  font-size: 35px;
+}
+
+/* code for hampburger menu */
+/* Style the navigation menu */
+
+nav{
+  background: red;
+  height: 80px;
+  width: 100%;
+}
+
+label.logo a{
+  font-size: 35px;
+  color: white;
+  line-height: 80px;
+  text-decoration: none;
+  padding: 0 100px;
+  font-weight: bold;
+}
+
+ul{
+  float: right;
+  margin-right: 20px;
+  
+}
+
+nav ul li{
+  display: inline-block;
+  line-height: 80px;
+  margin: 0 5px;
+  text-decoration: none;
+}
+
+nav ul li a{
+  color: white;
+  font-size: 17px;
+  text-transform: uppercase;
+  padding: 7px 13px;
+  border-radius: 3px;
+}
+
+a:hover{
+  background: black;
+  transition: 0.5s;
+  text-decoration: none;
+  color: white;
+}
+
+.checkbtn{
+  font-size: 30px;
+  color: white;
+  float: right;
+  line-height: 80px;
+  margin-right: 40px;
+  cursor: pointer;
+  display: none;
+}
+#check{
+  display: none;
+}
+
+@media (max-width: 952px){
+  label.logo a{
+    font-size: 25px;
+  }
+
+  nav ul li a{
+    font-size: 16px;
+  }
+
+  .welcome{
+    font-size: 25px;
+  }
+}
+
+@media(max-width: 858px){
+  .checkbtn{
+    display: block;
+  }
+  ul{
+    position: fixed;
+    width: 100%;
+    height:100vh;
+    background: #d6d5d4;
+    top: 80px;
+    left: -100%;
+    transition: all 0.5s;
+  }
+
+  nav ul li{
+    display: block;
+  }
+
+  nav ul li a{
+    font-size: 20px;
+    color: black;
+  }
+
+  #check:checked ~ ul{
+    left: 0;
+  }
+}
+
+@media(max-width: 500px){
+  .welcome{
+    font-size: 15px;
+  }
+
+  label.logo a{
+    font-size: 10px;
+  }
+
+}
+
+/* sign up form designing */
+.signup_main_div{
+  width: 300px;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+  background: #fff;
+  padding: 20px;
+  margin: 8% auto 0;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.signup_main_div h1{
+  color: #1c8abd;
+  margin-bottom: 30px;
+}
+
+.myfieldclass{
+  border-radius: 20px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: 1px solid #999;
+  outline: none;
+}
+
+.signup-button{
+  color: #fff;
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 15px;
+  margin: 10px 0;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  background-color: #1c8abd;
+}
+
+
+
