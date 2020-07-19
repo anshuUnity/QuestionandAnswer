@@ -11,7 +11,18 @@
     -o-background-size: cover;
     margin-left: auto;
   }
+
+  .already-registered-message{
+    color: royalblue;
+    background: salmon;
+  }
 </style>
+
+{% if request.user.is_authenticated %}
+
+<h2 class="already-registered-message">You are already registered</h2>
+
+{% else %}
 
 <div class="container signup_main_div">
   <h1>Sign Up</h1>
@@ -23,5 +34,7 @@
     </form>  
   </div>
 </div>
+
+{% endif %}
 
 {% endblock %}

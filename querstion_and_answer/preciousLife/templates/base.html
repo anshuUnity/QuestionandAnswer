@@ -52,6 +52,7 @@
                 <li><a  href="#">Blog</a></li>
                 <li><a  href="{% url 'accounts:logout' %}">Logout</a></li>
                 <li><a href="{% url 'questions_answer:create' %}">Create</a></li>
+                <li><a href="{% url 'accounts:edit-profile' pk=user.userprofileinfo.pk %}">Edit</a></li>
             
                 {% else %}
                 <li><a  href="#">About Us</a></li>

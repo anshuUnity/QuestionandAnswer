@@ -18,7 +18,7 @@ from django.urls import path, include
 from preciousLife import main_views
 from questions_answer import views
 
-from django.conf import settings
+from preciousLife import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -30,6 +30,6 @@ urlpatterns = [
     path('thanks/', main_views.ThanksPage.as_view(), name='thanks'),
     path('questions_answer/', include('questions_answer.urls')),
     path('summernote/', include('django_summernote.urls')),
-]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

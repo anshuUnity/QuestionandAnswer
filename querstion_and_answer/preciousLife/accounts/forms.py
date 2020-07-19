@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from accounts.models import UserProfileInfo
+from django import forms
 
 class SignUpForm(UserCreationForm):
 
@@ -27,3 +29,10 @@ class SignUpForm(UserCreationForm):
 
         for text in ['username', 'password1', 'password2']:
             self.fields[text].help_text = None
+
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model       = UserProfileInfo
+        fields      = ('website', 'profile_pic', 'description', 'full_name')

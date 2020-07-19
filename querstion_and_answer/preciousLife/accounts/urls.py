@@ -5,7 +5,8 @@ from accounts import views
 app_name = 'accounts'
 
 urlpatterns = [
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', redirect_authenticated_user=True), name='login'),
     path('logout/', auth_views.LogoutView.as_view(),name='logout'),
     path('register/', views.SignUp.as_view(), name='register'),
+    path('edit/profile/<int:pk>/', views.EditProfile.as_view(), name = 'edit-profile')
 ]
