@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% load static %}
 {% block content %}
+{% load hitcount_tags %}
 
 <style>
     .question-list-main-div{
@@ -10,13 +10,20 @@
         padding: 20px;
         margin: 10% auto 0;
     }
+    .question_list_div{
+        color: red;
+    }
 </style>
 
 
 <div class="question-list-main-div">
     {% for questions in object_list %}
     <!-- <h3>{{ questions.description | safe }}</h3> -->
-    <div class="question_list_div">{{ questions.description | safe }}</div>
+    <a href="{% url 'questions_answer:question_detail' slug=questions.slug %}">
+        <p class="question_list_div">{{ questions.title }}</p>
+        <p class="question_list_div">{% get_hit_count for questions %}</p>
+    </a>
+    
     <hr>
     {% endfor %}
 </div>

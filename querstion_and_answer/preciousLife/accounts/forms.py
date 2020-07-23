@@ -35,4 +35,28 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model       = UserProfileInfo
-        fields      = ('website', 'profile_pic', 'description', 'full_name')
+        fields      = ('full_name', 'gender', 'description', 'website_instagram', 'website_twitter', 'profile_pic')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+              # giving place holders to fields
+        self.fields['website_instagram'].widget.attrs.update({'placeholder':'Instagram Link'})
+        self.fields['website_twitter'].widget.attrs.update({'placeholder':'Twitter Link'})
+        self.fields['profile_pic'].widget.attrs.update({'placeholder':''})
+        self.fields['description'].widget.attrs.update({'placeholder':'Description'})
+        self.fields['full_name'].widget.attrs.update({'placeholder':'Full Name'})
+
+        self.fields['profile_pic'].widget.attrs.update({'class' : 'profile_preview_edit_profile', 'id':'profile_preview_edit_profile_id'})
+        self.fields['website_instagram'].widget.attrs.update({'class' : 'edit_profile_website_instagram'})
+        self.fields['website_twitter'].widget.attrs.update({'class' : 'edit_profile_website_instagram'})
+        self.fields['description'].widget.attrs.update({'class' : 'edit_profile_description'})
+        self.fields['full_name'].widget.attrs.update({'class' : 'edit_profile_website_instagram'})
+        self.fields['gender'].widget.attrs.update({'class' : 'edit_profile_gender'})
+
+
+        self.fields['website_twitter'].label = ""
+        self.fields['website_instagram'].label = ""
+        self.fields['description'].label = ""
+        self.fields['full_name'].label = ""

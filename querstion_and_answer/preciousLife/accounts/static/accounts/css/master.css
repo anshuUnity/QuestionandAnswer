@@ -1,26 +1,22 @@
 
-body{
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .welcome{
   font-size: 35px;
+}
+
+.already-registered-message{
+  color: blue;
 }
 
 /* code for hampburger menu */
 /* Style the navigation menu */
 
 nav{
-  background: red;
   height: 80px;
   width: 100%;
 }
 
 label.logo a{
-  font-size: 35px;
+  font-size: 30px;
   color: white;
   line-height: 80px;
   text-decoration: none;
@@ -43,18 +39,12 @@ nav ul li{
 
 nav ul li a{
   color: white;
-  font-size: 17px;
+  font-size: 16px;
   text-transform: uppercase;
   padding: 7px 13px;
   border-radius: 3px;
 }
 
-a:hover{
-  background: black;
-  transition: 0.5s;
-  text-decoration: none;
-  color: white;
-}
 
 .checkbtn{
   font-size: 30px;
@@ -87,8 +77,8 @@ a:hover{
   .checkbtn{
     display: block;
   }
-  ul{
-    position: fixed;
+  .nav_ul{
+    position: absolute;
     width: 100%;
     height:100vh;
     background: #d6d5d4;
@@ -121,6 +111,7 @@ a:hover{
   }
 
 }
+
 
 /* sign up form designing */
 .signup_main_div{

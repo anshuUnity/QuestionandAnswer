@@ -1,15 +1,191 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 
-<div>
-    <h2>Edit Your Profile</h2>
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Confirm">
-    </form>
-</div>
+<style>
 
+    .body_tag{
+        background-image: radial-gradient(circle, #45adf3, #5c71b5, #3c4254);
+    }
+
+    .image_preview{
+        width: 100%;
+        min-height: 100px;
+        border: 2px solid #dddddd;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        float: left;
+        justify-content: center;
+        font-weight: bold;
+        color: #cccccc;
+    }
+
+    .image_preview_image_tag{
+        display: none;
+        width: 100%;
+    }
+
+    .container_main{
+        width: 500px;
+        padding: 20px;
+        margin: 2% auto 0;
+        background-color: white;
+    }
+
+    .edit_profile_heading{
+        text-align: center;
+        color: #d10e0e9f;
+        margin-bottom: 30px;
+    }
+
+    .container_second_main{
+        margin-top: 1rem;
+    }
+
+    .edit_profile_website_instagram {
+        width: 100%;
+        border-radius: 20px;
+        outline: none;
+        border: 1px solid #999;
+    }
+    .edit_profile_description{
+        width: 100%;
+        border-radius: 20px;
+        outline: none;
+        border: 1px solid #999;
+    }
+    .edit_profile_gender{
+        width: 100%;
+        border-radius: 20px;
+        outline: none;
+    }
+    .confirm_button{
+        color: #fff;
+        width: 100%;
+        padding: 10px;
+        border-radius: 20px;
+        font-size: 15px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        background-color: #1c8abd;
+    }
+
+    @media (max-width: 400px){
+        .container_main{
+            margin: 0;
+            width: 360px;
+        }
+
+        nav{
+            width: 100%;
+        }
+
+        .edit_profile_heading{
+            font-size: 16px;
+        }
+    }
+
+    @media (min-width: 400px){
+        .container_main{
+            margin: 0;
+            width: 400px;
+        }
+        .edit_profile_heading{
+            font-size: 16px;
+        }
+    }
+
+
+    @media (max-height: 600px){
+        .container_main{
+            width: 400px;
+            padding: 20px;
+            margin: 2% auto 0;
+            background-color: white;
+        }
+
+        .edit_profile_heading{
+            font-size: 25px;
+        }
+
+    }
+
+
+    @media (max-width: 280px){
+        .container_main{
+            width: 330px;
+            padding: 20px;
+            margin: 2% auto 0;
+            background-color: white;
+        }
+
+        .edit_profile_heading{
+            font-size: 15px;
+        }
+
+    }
+
+    @media (min-width: 750px){
+        .container_main{
+            width: 500px;
+            padding: 20px;
+            margin: 2% auto 0;
+            background-color: white;
+        }
+
+        .edit_profile_heading{
+            font-size: 15px;
+        }
+
+    }
+
+
+</style>
+
+<div>
+    <div class="container_main">
+        <h2 class="edit_profile_heading">Edit Your Profile</h2>
+        <div class="container_second_main">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="image_preview" id="imagePreview">
+                    <img src="" alt="Image Preview" class="image_preview_image_tag">
+                    <span class="imagePreview__defaultText">Image Preview</span>
+                </div>
+                <input type="submit" value="Confirm" class="confirm_button">
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        const inputFile = document.getElementById("profile_preview_edit_profile_id");
+        const previewContainer = document.getElementById("imagePreview");
+        const previewImage = previewContainer.querySelector(".image_preview_image_tag");
+        const previewDefaultText = previewContainer.querySelector(".imagePreview__defaultText");
+
+        inputFile.addEventListener("change", function(){
+            const file = this.files[0];
+
+            if(file){
+                const reader = new FileReader();
+
+                previewDefaultText.style.display = "none";
+                previewImage.style.display = "block";
+
+                reader.addEventListener("load", function(){
+                    previewImage.setAttribute("src", this.result);
+                });
+
+                reader.readAsDataURL(file)
+            }
+        });
+        
+    </script>
+</div>
+{{ form.media }}
 {% endblock %}

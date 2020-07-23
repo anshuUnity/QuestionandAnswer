@@ -25,7 +25,10 @@ SECRET_KEY = '9w81kc&3z%%p&b2_e)ztnk@0!_1u67&fu9aod$((elt77189i%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -41,12 +44,21 @@ INSTALLED_APPS = [
     'markdownx',
     'django_summernote',
     'taggit',
-
+    'hitcount',
+    'guardian',
 
     # my personal app
     'accounts', 
     'questions_answer',
 ]
+
+# django-guardian
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+GUARDIAN_RAISE_403 = True
 
 # sommernot editor necessary
 X_FRAME_OPTIONS = 'SAMEORIGIN'

@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from hitcount.views import HitCountDetailView
 
 from questions_answer.models import Question
 from django.contrib.auth import get_user_model
@@ -32,4 +33,14 @@ class CreateQuestion(CreateView):
 class QuestionsList(ListView):
     model = Question
     template_name = 'index.html'
+    
 
+class QuestionDetail(HitCountDetailView):
+    template_name = 'question_answer/question_detail.html'
+    model = Question
+    slug_field = 'slug'
+
+    try:
+        count_hit = True
+    except:
+        print('could not count the view')

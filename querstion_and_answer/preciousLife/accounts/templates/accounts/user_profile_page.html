@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .main_header_profile_page{
+        background-image: linear-gradient(to right, #1f57cf , #58c2cc);
+        background-size: cover;
+        border: 1px solid #ffffff;
+        width: 100%;
+        height: 500px;
+    }
+
+    .image_div img{
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+    }
+
+    .box_shadow_container{
+        width: 80%;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+        background: #fff;
+        padding: 20px;
+        margin: 6% auto 0;
+        height: 500px;
+        display: flex;
+    }
+
+    .detail_div{
+        /* margin-left: -100px; */
+        position: absolute;
+        margin-left: 600px;
+        width: 400px;
+    } 
+    .icon{
+        display: flex;
+        margin: 40% 0px;
+    }
+
+    .icon ul li{
+        display: inline-block;
+        margin: auto 20px;
+        box-shadow: 3px 3px 10px #aeaeae, 
+                    -4px -4px 10px white;
+        background-color: #eee;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        font-size: 25px;
+        color: #333;
+        transition: 0.5s;
+    }
+
+    .icon ul li:nth-child(1):hover{
+        color: #eee;
+        border-radius: 50%;
+        background-color: #c13584;
+    }
+    .icon ul li:nth-child(2):hover{
+        color: #eee;
+        border-radius: 50%;
+        background-color: #00acee;
+    }
+
+    .username{
+        animation: colorchange 20s infinite;
+    }
+
+    /* media queries */
+
+    @media(max-width: 500px) {
+        .box_shadow_container{
+            display: block;
+            height: 700px;
+            margin-bottom: 10px;
+        }
+
+        .image_div img{
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        }
+
+        .detail_div{
+        position: absolute;
+        margin-left: 10px;
+        width: 230px;
+        
+        } 
+
+        .icon ul li{
+        display: inline-block;
+        margin: 0px 20px;
+        box-shadow: 3px 3px 5px #aeaeae, 
+                    -4px -4px 5px white;
+        background-color: #eee;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 15px;
+        color: #333;
+        transition: 0.5s;
+        }
+
+        .icon{
+        display: flex;
+        margin: 30% 0px;
+        }
+    }
+
+    @keyframes colorchange {
+      0% {
+        
+        color: blue;
+      }
+      
+      10% {
+        
+        color: #8e44ad;
+      }
+      
+      20% {
+        
+        color: #1abc9c;
+      }
+      
+      30% {
+        
+        color: #d35400;
+      }
+      
+      40% {
+        
+        color: blue;
+      }
+      
+      50% {
+        
+        color: red;
+      }
+      
+      60% {
+        
+        color: blue;
+      }
+      
+      70% {
+        
+        color: #2980b9;
+      }
+      80% {
+     
+        color: #f1c40f;
+      }
+      
+      90% {
+     
+        color: #2980b9;
+      }
+      
+      100% {
+        
+        color: pink;
+      }
+    }
+
+    .alert {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        opacity: 1;
+        transition: opacity 0.6s;
+        display: none;
+    }
+
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .closebtn:hover {
+        color: black;
+    }
+
+
+</style>
+<header class="main_header_profile_page">
+    <div class="main_div_profile_page">
+        <div class="alert" id="alert_dialog">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <strong>Oops!</strong> User has not given the link.
+        </div>
+        <div class="box_shadow_container">
+            <div class="image_div">
+                <img src="{{ profile_detail.profile_pic.url }}" alt="Oops Could not load the image">
+            </div>
+            <div class="detail_div">
+                <h2 class="username"> {{user.username}} </h2>
+                <h4>{{profile_detail.full_name}}</h4>
+                <p>{{ profile_detail.description }}</p>
+                <p> Gender: {{ profile_detail.gender }} </p>
+                <!-- <button id="button_click" type="submit" value="Click Me">Click</button> -->
+
+                <div class="icon">
+                    <ul>
+                        {% if profile_detail.website_instagram %}
+                        <li><a href="{{ profile_detail.website_instagram}}"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                        {% else %}
+                        <li><a href="#" id="empty_link_clicked"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                        {% endif %}
+
+                        {% if profile_detail.website_twitter %}
+                        <li><a class="twitter" href="{{ profile_detail.website_twitter}}"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                        {% else %}
+                        <li><a href="#" id="empty_link_clicked_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                        {% endif %}
+
+                    </ul>
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>     
+        const element = document.getElementById("empty_link_clicked");
+        const alert_dialog = document.getElementById("alert_dialog");
+        const twitter_empty = document.getElementById("empty_link_clicked_twitter");
+
+        element.addEventListener("click", function(){
+            alert_dialog.style.display = "block";
+        }); 
+
+        twitter_empty.addEventListener("click", function(){
+            alert_dialog.style.display = "block";
+        });
+
+    </script>
+
+</header>
+
+
+{% endblock %}

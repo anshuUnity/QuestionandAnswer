@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load hitcount_tags %}
+
+{% block content %}
+
+<style>
+    .question_description{
+        color: red;
+    }
+</style>
+
+<div class="question-list-main-div">
+
+    <div class="question_description">
+        {{ question.description | safe }}
+        {{ hitcount.total_hits }}
+    </div>
+
+</div>
+
+{% endblock %}
