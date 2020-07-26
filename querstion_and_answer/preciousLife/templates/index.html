@@ -3,29 +3,65 @@
 {% load hitcount_tags %}
 
 <style>
-    .question-list-main-div{
-        width: 800px;
-        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
-        background: white;
-        padding: 20px;
-        margin: 10% auto 0;
+
+    .user_specific_nav{
+        border: 2px solid red;
+        height: 50px;
     }
-    .question_list_div{
-        color: red;
+
+    .question_list_feed{
+        border: 2px solid yellow;
+        height: 50px;
     }
+
+    .popular_feed{
+        border: 2px solid green;
+        height: 50px;
+    }
+
+    .question_main_div{
+        margin-top: 50px;
+    }
+    .main_banner_div{
+        border: 2px solid blue;
+        height: 50px;
+    }
+
+    /* @media (max-width: 768px){
+        .user_specific_nav{
+            display: none;
+        }
+    } */
+    
+
 </style>
 
+<div class="container-fluid">
+    <div class="main_banner_div">
 
-<div class="question-list-main-div">
-    {% for questions in object_list %}
-    <!-- <h3>{{ questions.description | safe }}</h3> -->
-    <a href="{% url 'questions_answer:question_detail' slug=questions.slug %}">
-        <p class="question_list_div">{{ questions.title }}</p>
-        <p class="question_list_div">{% get_hit_count for questions %}</p>
-    </a>
+    </div>
+    <div class="container question_main_div">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 d-md-none d-lg-block user_specific_nav">
     
-    <hr>
-    {% endfor %}
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-9 question_list_feed">
+    
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 popular_feed">
+    
+            </div>
+        </div>
+    </div>
 </div>
 
+
 {% endblock %}
+
+<!-- {% for questions in object_list %}
+<a href="{% url 'questions_answer:question_detail' slug=questions.slug %}">
+    <p class="question_list_div">{{ questions.title }}</p>
+    <p class="question_list_div">{% get_hit_count for questions %}</p>
+</a> -->
+<!-- <hr>
+{% endfor %} -->
