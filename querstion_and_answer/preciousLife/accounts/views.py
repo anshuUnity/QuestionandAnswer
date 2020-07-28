@@ -24,30 +24,6 @@ class SignUp(CreateView):
 
         
 
-# def user_profile_edit(request):
-#     user_profile = UserProfileForm
-    
-#     form = user_profile(request.POST or None, instance=request.user.userprofileinfo)
-#     if request.method == 'POST':
-
-        
-#         # user_profile = UserProfileForm(data=request.POST, instance=request.user.userprofileinfo)
-
-#         if form.is_valid():
-            
-#             if 'profile_pic' in request.FILES:
-#                 form.profile_pic = request.FILES['profile_pic']
-#             form.save()
-#             form.user = request.user
-#             return HttpResponseRedirect(reverse('home'))
-
-#         else:
-#             print(user_profile.errors)
-
-#     else:
-#         user_profile = UserProfileForm(instance=request.user.userprofileinfo)
-#     return render(request, 'accounts/edit_profile.html', {'form':form})
-
 @method_decorator(login_required, name='dispatch')
 class EditProfile(UpdateView):
     model = UserProfileInfo
@@ -65,3 +41,4 @@ class ProfileDetail(DetailView):
     model = UserProfileInfo
     context_object_name = 'profile_detail'
     template_name = 'accounts/user_profile_page.html'
+

@@ -10,6 +10,7 @@ from hitcount.views import HitCountDetailView
 
 from questions_answer.models import Question
 from django.contrib.auth import get_user_model
+from accounts.models import UserProfileInfo
 
 User = get_user_model()
 
@@ -33,6 +34,13 @@ class CreateQuestion(CreateView):
 class QuestionsList(ListView):
     model = Question
     template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] =  Question.tags.most_common()
+        return context
+
+
     
 
 class QuestionDetail(HitCountDetailView):

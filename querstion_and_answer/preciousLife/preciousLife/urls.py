@@ -31,8 +31,8 @@ urlpatterns = [
     path('questions_answer/', include('questions_answer.urls')),
     path('summernote/', include('django_summernote.urls')),
     path('hitcount/', include('hitcount.urls', namespace='hitcount')),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 handler404 = main_views.handler404
 handler500 = main_views.handler500

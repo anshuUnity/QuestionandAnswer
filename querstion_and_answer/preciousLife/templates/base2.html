@@ -1,3 +1,4 @@
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -81,6 +82,11 @@
             </div>
         </nav>
     </div>
-    
+    <div class="mycontent">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="{% static '/preciousLife/js/myJavaScript.js' %}"></script>
 </body>
 </html>

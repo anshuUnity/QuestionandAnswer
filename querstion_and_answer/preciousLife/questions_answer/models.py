@@ -7,6 +7,7 @@ from django.utils import timezone
 from hitcount.models import HitCountMixin
 
 from django.contrib.auth import get_user_model
+from accounts.models import UserProfileInfo
 # QUESTION_ANSWER MODELS 
 # Create your models here.
 
@@ -35,6 +36,9 @@ class Question(models.Model, HitCountMixin):
 
     def get_absolute_url(self):
         return reverse('questions_answer:question_detail', kwargs={'slug':self.slug})
+
+    
+
 
 
         

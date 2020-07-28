@@ -3,52 +3,205 @@
 {% load hitcount_tags %}
 
 <style>
-
-    .user_specific_nav{
-        border: 2px solid red;
+    .profile_image{
+        width: 50px;
         height: 50px;
     }
 
-    .question_list_feed{
-        border: 2px solid yellow;
-        height: 50px;
+    .profile_username_div{
+        display: flex;
+    }
+    .title_div{
+        margin-left: 60px;
+        margin-top: -20px;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 22px;
+        font-size: 19px;
     }
 
-    .popular_feed{
-        border: 2px solid green;
-        height: 50px;
+    .username {
+        margin-left: 10px;
+        line-height: 22px;
+        letter-spacing: 0.8px;
     }
 
-    .question_main_div{
-        margin-top: 50px;
-    }
-    .main_banner_div{
-        border: 2px solid blue;
-        height: 50px;
+    .date{
+        margin-left: 10px;
+        font-family: "Open Sans", Arial, sans-serif;
+        font-size: 11px;
+        line-height: 22px;
     }
 
-    /* @media (max-width: 768px){
-        .user_specific_nav{
-            display: none;
+    .discription_div{
+        margin-left: 60px;
+        
+    }
+    .discription_div span{
+        color: #707885;
+        font-size: 14px;
+        line-height: 24px;
+        text-align: start;
+    }
+
+    .tag_div{
+        margin-left: 10px;
+    }
+
+    .tag_list{
+        list-style-type: none;
+        overflow: hidden;
+    }
+
+    .tag_list_items{
+        float: left;
+        font-size: 11px;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 22px;
+        color: #7c7f85;
+        margin-left: 10px;
+        
+    }
+    .tag_list_items a{
+        padding: 2px;
+        border: 1px solid #d1d4cf;
+        border-radius: 2px;
+    }
+
+    .tag_list_items a{
+        text-decoration: none;
+        color: #7c7f85;
+    }
+
+    .tag_list_items a:hover{
+        background-color: #2d6ff7;
+        color: white;
+        border-radius: 2px;
+        border: 1px solid #2d6ff7;
+        border-radius: 2px;
+    }
+
+    .views_reply_div{
+        display: flex;
+        margin-left: 50px;
+        background-color: #f5f5f5;
+    }
+    .views_reply{
+        margin-left: 10px;
+        font-size: 12px;
+        color: #7c7f85;
+        line-height: 15px;
+        padding: 8px;
+        margin-top: 10px;
+        font-family: "Open Sans", Arial, sans-serif;
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        border-radius: 2px;
+    }
+
+    .views_reply_anchor{
+        font-family: Roboto, Arial, sans-serif;
+        margin-right: 10px;
+        font-size: 14px;
+        line-height: 15px;
+        padding: 8px;
+        letter-spacing: 0.8px;
+        border: 1px solid #272930;
+        background-color: #272930;
+        border-radius: 2px;
+        color: white;
+        margin-left: auto;
+        margin-bottom: 10px;
+    }
+
+    .views_reply_anchor:hover{
+        background-color: #2d6ff7;
+        text-decoration: none;
+        color: white;
+        border: 1px solid #2d6ff7;
+        border-radius: 2px;
+    }
+
+    @media(max-width: 300px){
+        .description{
+            font-size: 10px;
         }
+
+        .title{
+            font-size: 15px;
+        }
+    }
+
+    /* .views_reply_div a{
+        margin-left: auto;
     } */
-    
 
 </style>
 
-<div class="container-fluid">
+<div class="main_container">
     <div class="main_banner_div">
-
+        
     </div>
+    
     <div class="container question_main_div">
         <div class="row">
-            <div class="col-xl-3 col-lg-3 d-md-none d-lg-block user_specific_nav">
-    
+            <div class="col-xl-2 col-lg-3 d-md-none d-lg-none d-lg-block user_specific_nav">
+
             </div>
-            <div class="col-xl-6 col-lg-6 col-md-9 question_list_feed">
+            <div class="col-xl-8 col-lg-6 col-md-9 shadow p-3 mb-5 bg-white">
+
+                <div class="question_list_feed">
+                    {% for questions in object_list %}
+
+                <div class="profile_username_title_div">
+
+                    <div class="profile_username_div">
+                        {% if questions.user.userprofileinfo.profile_pic %}
+                        <img class="profile_image" src=" {{questions.user.userprofileinfo.profile_pic.url}} " alt="">
+                        {% else %}
+                        <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                        {% endif %}
+                        <p class="username">@{{questions.user.username}}</p>
+                        <p class="date">Asked: {{questions.published_date}}</p>
+                    </div>
+
+                    <div class="title_div">
+                        <a href="{% url 'questions_answer:question_detail' slug=questions.slug %}"><p class="title"> {{questions.title}} </p></a>
+                    </div>
+
+                    <div class="discription_div">
+                        <p class="description">{{questions.description|safe}}</p>
+                    </div>
+
+                    <div class="tag_div">
+                        <ul class="tag_list">
+                            {% for tag in questions.tags.all %}
+                            <li class="tag_list_items">
+                                <a href="">{{tag}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                      
+                    </div>
     
+                    <div class="views_reply_div">
+                        <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    6 Answers</p>                     
+                       
+                        <p class="views_reply"><i class="fa fa-eye" aria-hidden="true"></i>    {% get_hit_count for questions %} Views</p>                         
+                        
+                        <a class="views_reply views_reply_anchor" href="#">Answer</a>
+                        
+                    </div>
+                </div>
+                    <br>
+                    <hr>
+
+                {% endfor %}
+                
+                </div>
+
+                
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 popular_feed">
+            <div class="col-xl-2 col-lg-3 col-md-3 popular_feed">
     
             </div>
         </div>

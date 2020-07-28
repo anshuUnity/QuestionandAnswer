@@ -64,6 +64,11 @@ GUARDIAN_RAISE_403 = True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SUMMERNOTE_THEME = 'lite'
 
+SUMMERNOTE_CONFIG={
+    'iframe': True,
+    'attachment_require_authentication': True,
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
