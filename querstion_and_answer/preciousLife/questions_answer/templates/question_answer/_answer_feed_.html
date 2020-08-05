@@ -1,0 +1,32 @@
+<div class="answer_feed">
+    {% for answers in question.answer_set.all %}
+    <div class="profile_username_title_div">
+        <div class="profile_username_div">
+            <a href=" {% url 'accounts:profile_detail' pk=answers.user.userprofileinfo.pk %} ">
+                {% if answers.user.userprofileinfo.profile_pic %}
+                <img class="profile_image" src=" {{answers.user.userprofileinfo.profile_pic.url}} " alt="">
+                {% else %}
+                <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                {% endif %}
+            </a>
+            <p class="username">@{{answers.user.username}}</p>
+    </div>
+    <div class="answer_published_div">
+        <p class="date_answer">Answer added on: {{answers.published_at}}</p>
+    </div>
+
+    <div class="discription_div">
+        <span class="description">{{ answers.answer_description|safe|linebreaks|urlizetrunc:40}}</span>       
+    </div>
+
+    <hr>
+    <br>
+    {% endfor %}
+</div>
+
+<!-- <h4>Answers</h4>
+{% for answers in question.answer_set.all %}
+ <p>{{answer.count}}Answers</p>
+<p> {{answers.published_at}} </p>
+<p> {{answers.answer_description|urlize}} </p>
+{% endfor %} -->

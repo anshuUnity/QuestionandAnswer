@@ -62,11 +62,46 @@ GUARDIAN_RAISE_403 = True
 
 # sommernot editor necessary
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-SUMMERNOTE_THEME = 'lite'
+SUMMERNOTE_THEME = 'bs3'
 
 SUMMERNOTE_CONFIG={
     'iframe': True,
     'attachment_require_authentication': True,
+
+    'summernote': 
+    {
+         # Change editor size
+        'width': '350px',
+        'height': '480px',
+
+        'toolbar': [
+            ['style', ['style']],
+            ['color', ['color',]],
+            ['font', ['bold', 'underline', 'clear']],
+            ['insert', ['link']],
+            ['fontname', ['fontname']],
+            ['para', ['ul', 'paragraph']],
+            ['table', ['table']],
+            ['hr',['hr']]
+        ],
+
+            'popover':
+        {
+        
+            'image':
+            [
+                ['image', ['resizeHalf', 'resizeQuarter']],
+                ['float', ['floatLeft','floatNone']],
+                ['remove', ['removeMedia']]
+
+            ],
+
+            'link': [
+                ['link', ['linkDialogShow', 'unlink']]
+            ],
+        }
+    
+    },
 }
 
 MIDDLEWARE = [

@@ -1,0 +1,61 @@
+{% load hitcount_tags %}
+<div class="question_list_feed">
+    {% for questions in object_list %}
+    
+    <div class="profile_username_title_div">
+
+         <div class="profile_username_div">
+            <a href=" {% url 'accounts:profile_detail' pk=questions.user.userprofileinfo.pk %} ">
+                {% if questions.user.userprofileinfo.profile_pic %}
+                <img class="profile_image" src=" {{questions.user.userprofileinfo.profile_pic.url}} " alt="">
+                {% else %}
+                <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                {% endif %}
+            </a>
+            <p class="username">@{{questions.user.username}}</p>
+            <p class="date">Asked: {{questions.published_date}}</p>
+    </div>
+
+    <div class="title_div">
+        <a href="{% url 'questions_answer:question_detail' slug=questions.slug %}"><p class="title"> {{questions.title}} </p></a>
+    </div>
+
+    <div class="discription_div">
+        <span class="description">{{questions.description|safe}}</span>
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="3000">
+            <div class="carousel-inner" role="listbox">
+                {% for img in questions.images_set.all %}
+              <div class="carousel-item{% if forloop.first %}   active {% endif %} ">
+                <img class="question_images" src=" {{img.image.url}} " alt="First slide">
+              </div>
+              {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="tag_div">
+        <ul class="tag_list">
+            {% for tag in questions.tags.all %}
+            <li class="tag_list_items">
+                <a href="">{{tag}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+      
+    </div>
+
+        <div class="views_reply_div">
+            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    6 Answers</p>                     
+       
+            <p class="views_reply"><i class="fa fa-eye" aria-hidden="true"></i>    {% get_hit_count for questions %} Views</p>                         
+        
+            <a class="views_reply views_reply_anchor" href="#">Answer</a>
+        
+        </div>
+    </div>
+    <br>
+    <hr>
+{% endfor %}
+
+</div>

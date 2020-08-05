@@ -16,10 +16,11 @@ User = get_user_model()
 class Question(models.Model, HitCountMixin):
     slug            =models.SlugField(max_length=255)
     title           =models.CharField(max_length=264, blank=False, null=False, unique=True)
-    description     =models.TextField(max_length=None)
+    description     =models.TextField(max_length=None, blank=False, null=False)
     published_date  =models.DateTimeField()
     user            =models.ForeignKey(User, on_delete=models.CASCADE, related_name='question')
-    tags            =TaggableManager()
+    tags            =TaggableManager(blank=True)
+    
     
 
     class Meta:
@@ -37,8 +38,21 @@ class Question(models.Model, HitCountMixin):
     def get_absolute_url(self):
         return reverse('questions_answer:question_detail', kwargs={'slug':self.slug})
 
-    
+class Images(models.Model):
+    question            = models.ForeignKey(Question, on_delete=models.CASCADE)
+    image             = models.ImageField(upload_to='images/', blank=True, null=True)
+
+    def __str__(self):
+        return self.question.title + ' images'
 
 
+class Answer(models.Model):
+    questions                = models.ForeignKey(Question, on_delete=models.CASCADE, blank=True)
+    answer_description      = models.TextField(blank=False, null=False, verbose_name='answer_desc')
+    published_at            = models.DateTimeField(auto_now_add=True)
+    user                    = models.ForeignKey(User, on_delete=models.CASCADE)
+    isBestAnswer            = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.answer_description
         

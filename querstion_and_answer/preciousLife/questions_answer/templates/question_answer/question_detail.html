@@ -4,22 +4,202 @@
 {% block content %}
 
 <style>
-    .question_description{
-        color: red;
+    .profile_image{
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .profile_username_div{
+        display: flex;
+    }
+    .title_div{
+        margin-left: 60px;
+        margin-top: -20px;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 22px;
+        font-size: 19px;
+    }
+
+    .username {
+        margin-left: 10px;
+        line-height: 22px;
+        letter-spacing: 0.8px;
+        font-size: 14px;
+    }
+
+    .date{
+        margin-left: 10px;
+        font-family: "Open Sans", Arial, sans-serif;
+        font-size: 11px;
+        line-height: 22px;
+    }
+    .discription_div{
+        margin-left: 60px;        
+    }
+    .discription_div span{
+        color: #707885;
+        font-size: 14px;
+        line-height: 24px;
+        text-align: start;
+    }
+
+    /* .carousel-inner{
+        width: 200px !important;
+    } */
+
+    .question_images{
+        width: 400px;
+        height: 200px;
+    }
+
+    .tag_div{
+        margin-left: 10px;
+    }
+
+    .tag_list{
+        list-style-type: none;
+        overflow: hidden;
+    }
+
+    .tag_list_items{
+        float: left;
+        font-size: 11px;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 22px;
+        color: #7c7f85;
+        margin-left: 10px;
+        
+    }
+    .tag_list_items a{
+        padding: 2px;
+        border: 1px solid #d1d4cf;
+        border-radius: 2px;
+    }
+
+    .tag_list_items a{
+        text-decoration: none;
+        color: #7c7f85;
+    }
+
+    .tag_list_items a:hover{
+        background-color: #2d6ff7;
+        color: white;
+        border-radius: 2px;
+        border: 1px solid #2d6ff7;
+        border-radius: 2px;
+    }
+
+    .views_reply_div{
+        display: flex;
+        margin-left: 50px;
+        background-color: #f5f5f5;
+    }
+    .views_reply{
+        margin-left: 10px;
+        font-size: 12px;
+        color: #7c7f85;
+        line-height: 15px;
+        padding: 8px;
+        margin-top: 10px;
+        font-family: "Open Sans", Arial, sans-serif;
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        border-radius: 2px;
+    }
+
+    .views_reply_anchor{
+        font-family: Roboto, Arial, sans-serif;
+        margin-right: 10px;
+        font-size: 14px;
+        line-height: 15px;
+        padding: 8px;
+        letter-spacing: 0.8px;
+        border: 1px solid #272930;
+        background-color: #272930;
+        border-radius: 2px;
+        color: white;
+        margin-left: auto;
+        margin-bottom: 10px;
+    }
+
+    .views_reply_anchor:hover{
+        background-color: #2d6ff7;
+        text-decoration: none;
+        color: white;
+        border: 1px solid #2d6ff7;
+        border-radius: 2px;
+    }
+
+    .report_div{
+        font-size: 12px;
+        font-family: Roboto, Arial, sans-serif;
+    }
+
+    .report_div a{
+        color: #464e5b;
+        line-height: 15px;
+    }
+
+    /* answer block styling */
+    .date_answer{
+        margin-left: 60px;
+        font-family: "Open Sans", Arial, sans-serif;
+        font-size: 11px;
+        line-height: 22px;
+        margin-top: -30px;
+        color: #7c7f85;
+    }
+
+    .discription_div_answer{
+        width: 80%;
+    }
+
+
+    @media(max-width: 300px){
+        .description{
+            font-size: 10px;
+        }
+
+        .title{
+            font-size: 15px;
+        }
     }
 </style>
 
 <div class="question-list-main-div">
 
-    <div class="question_description">
-        {{ question.description | safe }}
-        {{ hitcount.total_hits }}
-        {{question.user.username}}
-        {% for tag in question.tags.all %}
-        <p> {{tag}} </p>
-        {% endfor %}
+    <div class="main_container">
+        <div class="main_banner_div">
+            
+        </div>
+        
+        <div class="container question_main_div">
+            <div class="row">
+                <div class="col-xl-2 col-lg-3 d-md-none d-lg-none d-lg-block user_specific_nav">
+    
+                </div>
+                <div class="col-xl-8 col-lg-6 col-md-9 shadow p-3 mb-5 bg-white">
+                    {% include 'question_answer/_feed_detail_.html' %}
+                    {% include 'question_answer/_answer_feed_.html' %}                    
+                </div>
+                <div class="col-xl-2 col-lg-3 col-md-3 popular_feed">
+        
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 
 {% endblock %}
+<!-- 
+<div class="question_description">
+    {{ question.description | safe }}
+    {{ hitcount.total_hits }}
+    {{question.user.username}}
+    {% for tag in question.tags.all %}
+    <p> {{tag}} </p>
+    {% endfor %}
+</div> -->

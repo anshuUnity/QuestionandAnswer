@@ -3,9 +3,12 @@
 {% load hitcount_tags %}
 
 <style>
+
     .profile_image{
         width: 50px;
         height: 50px;
+        background: white;
+        border-radius: 50%;
     }
 
     .profile_username_div{
@@ -41,6 +44,15 @@
         font-size: 14px;
         line-height: 24px;
         text-align: start;
+    }
+
+    /* .carousel-inner{
+        width: 200px !important;
+    } */
+
+    .question_images{
+        width: 400px;
+        height: 200px;
     }
 
     .tag_div{
@@ -137,6 +149,19 @@
 
 </style>
 
+<div class="messages">
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <p class="alert alert-{{message.tags}}">{{message}}</p>
+
+        {% endfor %}
+
+    {% endif %}
+</div>
+
+
 <div class="main_container">
     <div class="main_banner_div">
         
@@ -148,57 +173,7 @@
 
             </div>
             <div class="col-xl-8 col-lg-6 col-md-9 shadow p-3 mb-5 bg-white">
-
-                <div class="question_list_feed">
-                    {% for questions in object_list %}
-
-                <div class="profile_username_title_div">
-
-                    <div class="profile_username_div">
-                        {% if questions.user.userprofileinfo.profile_pic %}
-                        <img class="profile_image" src=" {{questions.user.userprofileinfo.profile_pic.url}} " alt="">
-                        {% else %}
-                        <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
-                        {% endif %}
-                        <p class="username">@{{questions.user.username}}</p>
-                        <p class="date">Asked: {{questions.published_date}}</p>
-                    </div>
-
-                    <div class="title_div">
-                        <a href="{% url 'questions_answer:question_detail' slug=questions.slug %}"><p class="title"> {{questions.title}} </p></a>
-                    </div>
-
-                    <div class="discription_div">
-                        <p class="description">{{questions.description|safe}}</p>
-                    </div>
-
-                    <div class="tag_div">
-                        <ul class="tag_list">
-                            {% for tag in questions.tags.all %}
-                            <li class="tag_list_items">
-                                <a href="">{{tag}}</a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                      
-                    </div>
-    
-                    <div class="views_reply_div">
-                        <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    6 Answers</p>                     
-                       
-                        <p class="views_reply"><i class="fa fa-eye" aria-hidden="true"></i>    {% get_hit_count for questions %} Views</p>                         
-                        
-                        <a class="views_reply views_reply_anchor" href="#">Answer</a>
-                        
-                    </div>
-                </div>
-                    <br>
-                    <hr>
-
-                {% endfor %}
-                
-                </div>
-
+                {% include 'question_answer/_feed_.html' %}
                 
             </div>
             <div class="col-xl-2 col-lg-3 col-md-3 popular_feed">

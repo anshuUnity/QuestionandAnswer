@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST">
-    {{form.as_p}}
-    {% csrf_token %}
-    <input type="submit" class="btn btn-primary" value="Post"> 
-</form>
-{{ form.media}}
-{% endblock %}
+
+<style>
+    .form_div{
+        height: 500px;
+    }
+</style>
+
+<div class="form_div">
+    <form method="POST" enctype="multipart/form-data">
+        {{form.as_p}}
+        {{formset.as_table}}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" value="Post"> 
+    </form>
+    {{ form.media}}
+    {% endblock %}
+</div>

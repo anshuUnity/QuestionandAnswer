@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.contrib.auth.models import User
 
 from accounts.forms import SignUpForm
 from accounts.forms import UserProfileForm
+from django.contrib.messages.views import SuccessMessageMixin
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -25,7 +26,7 @@ class SignUp(CreateView):
         
 
 @method_decorator(login_required, name='dispatch')
-class EditProfile(UpdateView):
+class EditProfile(SuccessMessageMixin ,UpdateView):
     model = UserProfileInfo
     # fields = ['description', 'full_name', 'website', 'profile_pic', 'gender',]
     template_name = 'accounts/edit_profile.html'
