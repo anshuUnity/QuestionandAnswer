@@ -17,22 +17,44 @@ from django.contrib import admin
 from django.urls import path, include
 from preciousLife import main_views
 from questions_answer import views
+from django.contrib.auth import views as auth_views
 
 from preciousLife import settings
 from django.conf.urls.static import static
+import notifications.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.QuestionsList.as_view(), name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('account/', include('django.contrib.auth.urls')),
     path('test/', main_views.TestPage.as_view(), name='test'),
     path('thanks/', main_views.ThanksPage.as_view(), name='thanks'),
     path('questions_answer/', include('questions_answer.urls')),
     path('summernote/', include('django_summernote.urls')),
     path('hitcount/', include('hitcount.urls', namespace='hitcount')),
+
+    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
+    # password reset views
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'), 
+        name='password_change_done'),
+
+    path('password_change/', auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'), 
+        name='password_change'),
+
+    path('password_reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_done.html'),
+     name='password_reset_done'),
+
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'), 
+        name='password_reset_confirm'),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset_form.html'), name='password_reset'),
+    
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),
+     name='password_reset_complete'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
 handler404 = main_views.handler404
 handler500 = main_views.handler500

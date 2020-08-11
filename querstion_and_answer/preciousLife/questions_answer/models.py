@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 from django.utils import timezone
 from hitcount.models import HitCountMixin
 
+
 from django.contrib.auth import get_user_model
 from accounts.models import UserProfileInfo
 # QUESTION_ANSWER MODELS 
@@ -14,13 +15,14 @@ from accounts.models import UserProfileInfo
 User = get_user_model()
 
 class Question(models.Model, HitCountMixin):
-    slug            =models.SlugField(max_length=255)
-    title           =models.CharField(max_length=264, blank=False, null=False, unique=True)
-    description     =models.TextField(max_length=None, blank=False, null=False)
-    published_date  =models.DateTimeField()
-    user            =models.ForeignKey(User, on_delete=models.CASCADE, related_name='question')
-    tags            =TaggableManager(blank=True)
-    
+    slug              =models.SlugField(max_length=255)
+    title             =models.CharField(max_length=264, blank=False, null=False, unique=True)
+    description       =models.TextField(max_length=None, blank=False, null=False)
+    published_date    =models.DateTimeField()
+    user              =models.ForeignKey(User, on_delete=models.CASCADE, related_name='question')
+    tags              =TaggableManager(blank=True, help_text='Give the tags to the question')
+    likes             =models.ManyToManyField(User, related_name='likes') 
+ 
     
 
     class Meta:
@@ -37,6 +39,9 @@ class Question(models.Model, HitCountMixin):
 
     def get_absolute_url(self):
         return reverse('questions_answer:question_detail', kwargs={'slug':self.slug})
+
+    def total_likes(self):
+        return self.likes.count()
 
 class Images(models.Model):
     question            = models.ForeignKey(Question, on_delete=models.CASCADE)

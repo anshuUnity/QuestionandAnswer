@@ -1,0 +1,11 @@
+<div class="like_form_counts">
+    <form method="POST"  action=" {% url 'questions_answer:likes' question.slug %} ">
+        {% csrf_token %}
+        {% if isliked %}
+        <button class="views_reply dislike" id="like" type="submit" name="question_id" value="{{ question.id }}"><i class="fa fa-heart"></i></button>
+        {% else %}
+        <button class="views_reply dislike" id="like" type="submit" name="question_id" value="{{ question.id }}"><i class="fa fa-heart"></i></button>
+        {% endif %}
+    </form>
+    <p> {{total_likes}} Like{{total_likes|pluralize}}</p>
+</div>

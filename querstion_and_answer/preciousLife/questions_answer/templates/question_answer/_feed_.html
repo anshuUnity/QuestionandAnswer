@@ -1,7 +1,7 @@
 {% load hitcount_tags %}
 <div class="question_list_feed">
-    {% for questions in object_list %}
-    
+    {% for questions in questions %}
+
     <div class="profile_username_title_div">
 
          <div class="profile_username_div">
@@ -38,7 +38,7 @@
         <ul class="tag_list">
             {% for tag in questions.tags.all %}
             <li class="tag_list_items">
-                <a href="">{{tag}}</a>
+                <a href=" {% url 'questions_answer:qa_tag' tag.slug %} ">{{tag}}</a>
             </li>
             {% endfor %}
         </ul>
@@ -46,7 +46,7 @@
     </div>
 
         <div class="views_reply_div">
-            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    6 Answers</p>                     
+            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    {{questions.answer_set.count}} Answer{{questions.answer_set.count|pluralize}}</p>                     
        
             <p class="views_reply"><i class="fa fa-eye" aria-hidden="true"></i>    {% get_hit_count for questions %} Views</p>                         
         

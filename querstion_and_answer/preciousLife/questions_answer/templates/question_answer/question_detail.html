@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load notifications_tags %}
 {% load hitcount_tags %}
 
 {% block content %}
@@ -36,9 +37,21 @@
         line-height: 22px;
     }
     .discription_div{
+        margin-top: -70px;
         margin-left: 60px;        
     }
     .discription_div span{
+        color: #707885;
+        font-size: 14px;
+        line-height: 24px;
+        text-align: start;
+    }
+
+    .discription_div_answer{
+        margin-left: 60px; 
+    }
+
+    .discription_div_answer span{
         color: #707885;
         font-size: 14px;
         line-height: 24px;
@@ -149,21 +162,87 @@
         font-size: 11px;
         line-height: 22px;
         margin-top: -30px;
-        color: #7c7f85;
+        color: #677075;
     }
 
     .discription_div_answer{
         width: 80%;
+        margin-top: -10px;
     }
 
+    .dislike{
+        color: red;
+    }
 
-    @media(max-width: 300px){
+    .like_form_counts p{
+        font-family: Roboto, Arial, sans-serif;
+        font-size: 13px;
+        line-height: 20px;
+        color: #464e5b;
+    }
+
+    .related_question{
+        background: white;
+        margin-left: -10px;
+    }
+
+    .related_question p{
+        margin-left: 10px;
+        color: #26333b;
+        font-size: 14px;
+        line-height: 23px;
+    }
+    .answer_injection{
+        margin-top: 20px;
+    }
+    .image_title_div{
+        margin-left: 10px;
+        margin-right: 5px;
+        font-size: 14px;
+        display: flex;
+    }
+
+    .image_title_div p{
+        color: #272930;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 22px;
+        margin-left: 10px;
+    }
+
+    .profile_image_popular{
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+    }
+    .answer_count_popular_div p{
+        margin-left: 30px;
+        margin-top: -10px;
+    }
+
+    .profile_image_specific_nav{
+        width: 100%;
+        height: 150px;
+    }
+
+    @media(max-width: 400px){
         .description{
             font-size: 10px;
         }
 
         .title{
             font-size: 15px;
+        }
+
+        .views_reply{
+            font-size: 10px;
+        }
+    }
+
+    @media(max-width: 500px){
+        .profile_image_specific_nav{
+            width: 50%;
+            height: 100px;
         }
     }
 </style>
@@ -172,24 +251,79 @@
 
     <div class="main_container">
         <div class="main_banner_div">
-            
         </div>
         
         <div class="container question_main_div">
             <div class="row">
-                <div class="col-xl-2 col-lg-3 d-md-none d-lg-none d-lg-block user_specific_nav">
-    
+                <div class="col-xl-2 d-lg-none d-xl-block d-md-none user_specific_nav">
+                    {% include 'question_answer/_user_specific_nav.html' %}
                 </div>
-                <div class="col-xl-8 col-lg-6 col-md-9 shadow p-3 mb-5 bg-white">
-                    {% include 'question_answer/_feed_detail_.html' %}
-                    {% include 'question_answer/_answer_feed_.html' %}                    
+                <div class="col-xl-7 col-lg-8 col-md-9 question_feed shadow p-3 mb-5 bg-white">
+                    <div class="question_injection">
+                        {% include 'question_answer/_feed_detail_.html' %}
+                    </div>
+                    <div class="answer_injection">
+                        {% include 'question_answer/_answer_feed_.html' %}  
+                    </div>
+                                      
+                    
                 </div>
-                <div class="col-xl-2 col-lg-3 col-md-3 popular_feed">
-        
+                <div class="col-xl-3 col-lg-4 col-md-3 popular_Related_feed">
+                    <div class="related_question">
+                        <p><i class="fa fa-question-circle"></i>     Related Question</p>
+                        <div class="related_question_feed">
+                            {% if related_question %}
+                            {% for related in related_question %}
+                            <div class="image_title_div">
+                                <div class="popular_profile_image">
+                                    <a href=" {% url 'accounts:profile_detail' pk=related.user.userprofileinfo.pk %} ">
+                                    {% if trends.user.userprofileinfo.profile_pic %}
+                                    <img class="profile_image_popular" src=" {{related.user.userprofileinfo.profile_pic.url}} " alt="">
+                                    {% else %}
+                                    <img class="profile_image_popular" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                                    {% endif %}
+                                    </a>
+                                </div>
+                                <a href="{% url 'questions_answer:question_detail' slug=related.slug %}"><p> {{related.title}} </p></a>
+                            </div>
+                            <div class="answer_count_popular_div">
+                                <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    {{related.answer_set.count}} Answer{{related.answer_set.count|pluralize}}</p>
+                            </div>
+                            <hr>
+                        {% endfor %}
+                        {% else %}
+                        <p>No related Question found</p>
+                        {% endif %}
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function(event){
+            $(document).on('click', '#like', function(event){
+                event.preventDefault();
+                var pk = $(this).attr('value');
+                $.ajax({
+                    type:'POST',
+                    url:'{% url "questions_answer:likes" question.slug %}',
+                    data:{'question_id':pk, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
+                    dataType:'json',
+                    success:function(response){
+                        $('#like-section').html(response['form'])
+                        console.log($('#like-section').html(response['form']));
+                    },
+                    error:function(rs, e){
+                        console.log(rs.responseText);
+                    },
+                });
+            });
+        });
+
+    </script>
 
 </div>
 

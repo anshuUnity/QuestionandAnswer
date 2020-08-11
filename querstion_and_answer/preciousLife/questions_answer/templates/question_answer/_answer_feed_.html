@@ -1,5 +1,7 @@
 <div class="answer_feed">
+    {% if question.answer_set.all %}
     {% for answers in question.answer_set.all %}
+    
     <div class="profile_username_title_div">
         <div class="profile_username_div">
             <a href=" {% url 'accounts:profile_detail' pk=answers.user.userprofileinfo.pk %} ">
@@ -10,23 +12,21 @@
                 {% endif %}
             </a>
             <p class="username">@{{answers.user.username}}</p>
+        </div>
     </div>
     <div class="answer_published_div">
         <p class="date_answer">Answer added on: {{answers.published_at}}</p>
     </div>
 
-    <div class="discription_div">
-        <span class="description">{{ answers.answer_description|safe|linebreaks|urlizetrunc:40}}</span>       
+    <div class="discription_div_answer">
+        <span class="description">{{ answers.answer_description|safe|linebreaks|urlizetrunc:35}}</span>     
     </div>
 
     <hr>
     <br>
+    
     {% endfor %}
+    {% else %}
+    <p>No answers yet</p>
+    {% endif %}
 </div>
-
-<!-- <h4>Answers</h4>
-{% for answers in question.answer_set.all %}
- <p>{{answer.count}}Answers</p>
-<p> {{answers.published_at}} </p>
-<p> {{answers.answer_description|urlize}} </p>
-{% endfor %} -->

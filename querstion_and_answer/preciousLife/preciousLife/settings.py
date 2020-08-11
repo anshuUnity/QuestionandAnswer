@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'taggit',
     'hitcount',
     'guardian',
+    'notifications',
 
     # my personal app
     'accounts', 
@@ -194,8 +195,15 @@ STATICFILES_DIRS = [
     'querstion_and_answer/preciousLife/accounts/static',
 ]
 
-LOGIN_REDIRECT_URL = 'test'
-LOGOUT_REDIRECT_URL = 'thanks'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
+EMAIL_HOST_USER = 'anshupal258@gmail.com' # email id
+EMAIL_HOST_PASSWORD = 'Pal@226029' #password
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

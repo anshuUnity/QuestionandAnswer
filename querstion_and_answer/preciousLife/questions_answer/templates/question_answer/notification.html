@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load notifications_tags %}
+
+{% block content %}
+{% notifications_unread as unread_count %}
+{% if unread_count %}
+    You have <strong>{{ unread_count }}</strong> unread notifications.
+{% endif %}
+{% endblock %}

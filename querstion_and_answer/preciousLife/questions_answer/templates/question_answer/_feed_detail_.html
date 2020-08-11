@@ -20,6 +20,10 @@
         <a href="{% url 'questions_answer:question_detail' slug=question.slug %}"><p class="title"> {{question.title}} </p></a>
     </div>
 
+    <div class="like_image" id="like-section">
+        {% include 'question_answer/_like_snippet.html' %}
+    </div>
+
     <div class="discription_div">
         <span class="description">{{ question.description | safe }}</span>
         <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="3000">
@@ -38,7 +42,8 @@
         <ul class="tag_list">
             {% for tag in question.tags.all %}
             <li class="tag_list_items">
-                <a href="">{{tag}}</a>
+                <a href=" {% url 'questions_answer:qa_tag' tag.slug %} ">{{tag}}</a>
+                
             </li>
             {% endfor %}
         </ul>
@@ -46,9 +51,9 @@
     </div>
     <div>
         <div class="views_reply_div">
-            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    {{question.answer_set.count}} Answers</p>                     
+            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    {{question.answer_set.count}} Answer{{question.answer_set.count|pluralize}}</p>                     
        
-            <p class="views_reply"><i class="fa fa-eye" aria-hidden="true"></i>    {{ hitcount.total_hits }} Views</p>                         
+            <p class="views_reply"><i class="fa fa-eye" aria-hidden="true"></i>    {{ hitcount.total_hits }} Views</p>
         
             <a class="views_reply views_reply_anchor" href="{% url 'questions_answer:answer' pk=question.pk %}">Answer</a>
         
@@ -61,6 +66,6 @@
         <a href="#" data-toggle='tooltip' data-placement="bottom" title="Report user"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> report</a>
     </div>
     <hr>
-
+    Answers
 </div>
 
