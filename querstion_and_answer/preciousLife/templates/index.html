@@ -23,6 +23,7 @@
     }
 
     .username {
+        color: #2d6ff7;
         margin-left: 10px;
         line-height: 22px;
         letter-spacing: 0.8px;
@@ -34,6 +35,17 @@
         font-size: 11px;
         line-height: 22px;
     }
+
+    .title_div a{
+        text-decoration: none;
+        color: #272930;
+    }
+
+    .title_div a:hover{
+        text-decoration: none;
+        color: #2d6ff7;
+    }
+
 
     .discription_div{
         margin-left: 60px;
@@ -57,6 +69,7 @@
 
     .tag_div{
         margin-left: 10px;
+        margin-top: 5px;
     }
 
     .tag_list{
@@ -288,11 +301,3 @@
 
 
 {% endblock %}
-
-<!-- {% for questions in object_list %}
-<a href="{% url 'questions_answer:question_detail' slug=questions.slug %}">
-    <p class="question_list_div">{{ questions.title }}</p>
-    <p class="question_list_div">{% get_hit_count for questions %}</p>
-</a> -->
-<!-- <hr>
-{% endfor %} -->

@@ -1,7 +1,8 @@
+{% load notifications_tags %}
 <div class="user_specific_navbar">
     <div class="profile_image_specific_nav">
-        {% if question.user.userprofileinfo.profile_pic %}
-        <img class="profile_image_specific_nav" src=" {{question.user.userprofileinfo.profile_pic.url}} " alt="">
+        {% if user.userprofileinfo.profile_pic %}
+        <img class="profile_image_specific_nav" src=" {{user.userprofileinfo.profile_pic.url}} " alt="">
         {% else %}
         <img class="profile_image_specific_nav" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
         {% endif %}
@@ -9,7 +10,22 @@
     <div class="navbars_text" style="margin-top:10px">
         <p><i class="fa fa-home"></i> Home</p>
         <p><i class="fa fa-user-circle"></i> Profile</p>
-        <p><i class="fa fa-bell"></i> Notification</p>
+        <a href=" {% url 'notice:notice_list' %} ">
+            <p><i class="fa fa-bell"></i> Notification
+                {% notifications_unread as unread_count %}
+                {% if unread_count %}
+                    <svg viewBox="0 0 8 8"
+                    width="8px"
+                    height="8px">
+                    <circle cx="4"
+                        cy="4"
+                        r="4"
+                        fill="#ff6b6b"
+                    ></circle>
+            </svg>
+            {% endif %}
+        </p>
+        </a>
         <p><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Profile</p>
     </div>
 </div>

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # my personal app
     'accounts', 
     'questions_answer',
+    'notice',
 ]
 
 # django-guardian
@@ -58,6 +59,12 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # this is default
     'guardian.backends.ObjectPermissionBackend',
 )
+
+# notifications settings
+DJANGO_NOTIFICATIONS_CONFIG = { 
+    'SOFT_DELETE': True,
+
+    }
 
 GUARDIAN_RAISE_403 = True
 
@@ -104,6 +111,10 @@ SUMMERNOTE_CONFIG={
     
     },
 }
+
+# hitcount limit per ip address
+# default value = 0, unlimited
+HITCOUNT_HITS_PER_IP_LIMIT = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
-from django.views.generic import CreateView, ListView, DetailView
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect, Http404
+from django.core.exceptions import ValidationError
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from questions_answer.form import QuestionForm, ImageForm, AnswerForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -67,6 +68,84 @@ def create_question_view(request):
 
     return render(request, 'question_answer/create_question.html', context)
 
+@login_required
+def update_question_view(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+    ImageFormSet = modelformset_factory(Images, fields=('image',), extra=3, max_num=3)
+
+    if question.user != request.user:
+        return Http404()
+
+    if request.method == 'POST':
+        form = QuestionForm(request.POST, instance=question)
+        formset = ImageFormSet(request.POST or None, request.FILES or None, queryset=Images.objects.filter(question=question))
+        if form.is_valid() and formset.is_valid():
+            form.save()
+
+            data = Images.objects.filter(question=question)
+            for index,f in enumerate(formset):
+                if f.cleaned_data:
+                    if f.cleaned_data['id'] is None:
+                        photo = Images(question=question, image=f.cleaned_data['image'])
+                        photo.save()
+
+                    elif f.cleaned_data['image'] is False:
+                        photo = Images.objects.get(id=request.POST.get('form-' + str(index) + '-id'))
+                        photo.delete()
+                    else:
+                        photo = Images(question=question, image=f.cleaned_data['image'])
+                        d = Images.objects.get(id=data[index].id)
+                        d.image = photo.image
+                        d.save()
+
+            return HttpResponseRedirect(question.get_absolute_url())
+    else:
+        form = QuestionForm(instance=question)
+        formset = ImageFormSet(queryset=Images.objects.filter(question=question))
+    context = {
+        'form':form,
+        'formset':formset
+    }
+
+    return render(request, 'question_answer/update_question.html', context)
+
+def LikeView(request, slug):
+    question = get_object_or_404(Question, id=request.POST.get('question_id'))
+    isliked = False
+    if question.likes.filter(id=request.user.id).exists():
+        question.likes.remove(request.user)
+        isliked = False
+    
+    else:
+        question.likes.add(request.user)
+        isliked = True
+
+    context = {
+        'question':question,
+        'total_likes': question.total_likes(),
+        'isliked':isliked
+    }
+
+    if request.is_ajax():
+        html = render_to_string('question_answer/_like_snippet.html', context, request=request)
+        return JsonResponse({'form':html})
+
+    # return HttpResponseRedirect(reverse('questions_answer:question_detail', args=[str(slug)]))
+
+def DeleteQuestion(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+
+    if request.user != question.user:
+        return Http404()
+    
+    question.delete()
+
+    messages.success(request, 'Question Deleted Successfully')
+    return redirect('home')
+
+#################
+##CLASS BASED VIEWS##
+##################
 class QuestionsList(ListView):
     model = Question
     template_name = 'index.html' 
@@ -100,30 +179,6 @@ class QuestionDetail(HitCountDetailView):
         context['related_question'] = related_question
         return context
 
-
-def LikeView(request, slug):
-    question = get_object_or_404(Question, id=request.POST.get('question_id'))
-    isliked = False
-    if question.likes.filter(id=request.user.id).exists():
-        question.likes.remove(request.user)
-        isliked = False
-    
-    else:
-        question.likes.add(request.user)
-        isliked = True
-
-    context = {
-        'question':question,
-        'total_likes': question.total_likes(),
-        'isliked':isliked
-    }
-
-    if request.is_ajax():
-        html = render_to_string('question_answer/_like_snippet.html', context, request=request)
-        return JsonResponse({'form':html})
-
-    # return HttpResponseRedirect(reverse('questions_answer:question_detail', args=[str(slug)]))
-
 class AnswerFormClass(CreateView):
     model = Answer
     form_class = AnswerForm
@@ -134,7 +189,9 @@ class AnswerFormClass(CreateView):
         form.instance.user = self.request.user
         form.instance.questions_id = self.kwargs['pk']
         notify.send(form.instance.user, recipient=form.instance.questions.user, 
-            verb='Answer Has Been posted To your Question')
+            verb=u'has answered your question', 
+            description=form.instance.answer_description, 
+            target=form.instance.questions)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -158,6 +215,19 @@ class QuestionSearchView(QuestionsList):
         if not result:
             messages.warning(self.request, 'No Records Found')
         return result
+
+
+# class DeleteQuestion(DeleteView):
+#     model = Question
+#     success_url = reverse_lazy('home')
+
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         return queryset.filter(user_id = self.request.user.id)
+
+#     def delete(self,*args, **kwargs):
+#         messages.success(self.request, 'Question Deleted Successfully')
+        
 
 class SearchByTagView(ListView):
     model = Question

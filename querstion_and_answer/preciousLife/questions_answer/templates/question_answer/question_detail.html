@@ -69,6 +69,7 @@
 
     .tag_div{
         margin-left: 10px;
+        margin-top: 5px;
     }
 
     .tag_list{
@@ -251,6 +252,24 @@
 
     <div class="main_container">
         <div class="main_banner_div">
+            
+            <!-- {% notifications_unread as unread_count %}
+            {% if unread_count %}
+                You have <strong>{{ unread_count }}</strong> unread notifications.
+            {% endif %}
+            <br>
+            {% register_notify_callbacks callbacks='fill_notification_menu,fill_notification_badge' %}
+            {% live_notify_badge %}
+            {% live_notify_list %} -->
+
+            <!-- {% for notice in unread %}
+            <li>{{notice.verb}}</li>
+            {% endfor %} -->
+
+            <!-- <h4>Read Notifications</h4>
+            {% for notice in read %}
+            <li>{{notice.description}}</li>
+            {% endfor %} -->
         </div>
         
         <div class="container question_main_div">

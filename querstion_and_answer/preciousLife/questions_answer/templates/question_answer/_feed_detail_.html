@@ -13,6 +13,10 @@
             </a>
             <p class="username">@{{question.user.username}}</p>
             <p class="date">Asked: {{question.published_date}}</p>
+            
+            {% if request.user == question.user %}
+                {% include 'question_answer/_delete_question_modal_.html' %}
+            {% endif %}
         </div>
     </div>
 

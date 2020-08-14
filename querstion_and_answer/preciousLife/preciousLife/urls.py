@@ -31,6 +31,8 @@ urlpatterns = [
     path('test/', main_views.TestPage.as_view(), name='test'),
     path('thanks/', main_views.ThanksPage.as_view(), name='thanks'),
     path('questions_answer/', include('questions_answer.urls')),
+    path('notice/', include('notice.urls', namespace='notice')),
+
     path('summernote/', include('django_summernote.urls')),
     path('hitcount/', include('hitcount.urls', namespace='hitcount')),
 

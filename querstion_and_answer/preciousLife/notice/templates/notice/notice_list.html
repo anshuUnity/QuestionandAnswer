@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+    .notification_div{
+        margin-top: 10px;
+    }
+
+    .profile_image_notice_verb{
+        display: flex;
+    }
+
+    .profile_image_notice_verb p{
+        font-size: 15px;
+        padding: 1px;
+        color: #26333b;
+        margin-left: 5px;
+    }
+
+    .notification_date p{
+        font-size: 15px;
+        padding: 1px;
+        color: #464e5b;
+        margin-left: 50px;
+        margin-top: -20px;
+    }
+
+    .notifications a{
+        display: block;
+        text-decoration: none;
+        background: #a3e6db;
+        
+    }
+
+    .notification a{
+        display: block;
+        text-decoration: none;       
+    }
+
+    .profile_image{
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 50%;
+        margin-left: 5px;
+        margin-top: 3px;
+    }
+
+    .question_desc{
+        margin-left: 50px;
+        font-size: 15px;
+        margin-top: -20px;
+    }
+
+    .notification_read{
+        border: 2px solid red;
+    }
+
+    @media (max-width: 500px){
+        .notifications{
+            width: 100%;
+        }
+        h3{
+            font-size: 25px;
+        }
+    }
+</style>
+{% if user.is_authenticated %}
+<div class="notification_div container">
+    <div class="row">
+        <div class="notifications col-xl-6 col-lg-6">
+            <h3>New Notifications</h3>
+            {% for notice in notices %}
+            <a class="link" href="{% url 'notice:notice_update' %}?question_id={{notice.target.id}}&notice_id={{notice.id}}">
+
+                <div class="profile_image_notice_verb">
+                    {% if notice.actor.userprofileinfo.profile_pic %}
+                    <img class="profile_image" src=" {{notice.actor.userprofileinfo.profile_pic.url}} " alt="">
+                    {% else %}
+                    <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                    {% endif %}
+                    <p>{{notice.actor|title}} {{notice.verb}},</p>
+                </div>
+                <div class="question_desc">
+                    <p style="color: #229c4f;"> "{{notice.description|truncatechars:50}}" </p>
+                </div>
+                <div class="notification_date">
+                    <p>{{notice.timestamp|timesince}} ago</p>
+                </div>
+                
+            </a>
+            <hr>           
+            {% endfor %}
+        </div>
+        <div class="notification col-xl-6 col-lg-6">
+            <h3>Notifications you have read</h3>
+            {% for notice in read %}
+            <a class="link" href="{% url 'notice:notice_update' %}?question_id={{notice.target.id}}&notice_id={{notice.id}}">
+
+                <div class="profile_image_notice_verb">
+                    {% if notice.actor.userprofileinfo.profile_pic %}
+                    <img class="profile_image" src=" {{notice.actor.userprofileinfo.profile_pic.url}} " alt="">
+                    {% else %}
+                    <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                    {% endif %}
+                    <p>{{notice.actor|title}} {{notice.verb}},</p>
+                    
+                </div>
+                <div class="question_desc">
+                    <p style="color: #229c4f;"> "{{notice.description|truncatechars:50}}" </p>
+                </div>
+                <div class="notification_date">
+                    <p>{{notice.timestamp|timesince}} ago</p>
+                </div>
+                
+            </a>
+            <hr>  
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+<!-- {% for notice in notices %}
+<a href="{% url 'notice:notice_update' %}?question_id={{notice.target.id}}&notice_id={{notice.id}}">
+    <p> {{notice.verb}} </p>
+    <p> {{notice.actor}} </p>
+    <p> {{notice.id}} </p>
+    <p> {{notice.target.id}} </p>
+    <p> {{notice.timestamp|timesince}} ago </p>
+    <p> {{notice.actor.userprofileinfo.full_name}} </p>
+</a>
+<hr>
+{% endfor %} -->
