@@ -109,6 +109,7 @@ def update_question_view(request, pk):
 
     return render(request, 'question_answer/update_question.html', context)
 
+@login_required
 def LikeView(request, slug):
     question = get_object_or_404(Question, id=request.POST.get('question_id'))
     isliked = False
@@ -140,9 +141,17 @@ def DeleteQuestion(request, pk):
     
     question.delete()
 
-    messages.success(request, 'Question Deleted Successfully')
-    return redirect('home')
+    # messages.success(request, 'Question Deleted Successfully')
+    return redirect('accounts:profile_detail', pk=question.user.userprofileinfo.pk)
 
+def delete_answer(request, pk):
+    answer = get_object_or_404(Answer, pk=pk)
+
+    if request.user != answer.user:
+        return Http404()
+    
+    answer.delete()
+    return redirect('accounts:profile_detail', pk=answer.user.userprofileinfo.pk)
 #################
 ##CLASS BASED VIEWS##
 ##################
@@ -197,6 +206,26 @@ class AnswerFormClass(CreateView):
     def get_success_url(self):
         return reverse('questions_answer:question_detail', kwargs={'slug': self.object.questions.slug})
 
+@method_decorator(login_required, name='dispatch')
+class AnswerUpdateView(UpdateView):
+    form_class = AnswerForm
+    model = Answer
+    template_name = 'question_answer/answer_update.html'
+
+    def get_success_url(self):
+        return reverse('accounts:profile_detail', kwargs={'pk':self.object.user.userprofileinfo.pk})
+
+# class AnswerDeleteView(DeleteView):
+#     model = Answer
+#     template_name = 'accounts/user_profile_page.html'
+
+#     def get_queryset(self, *args, **kwargs):
+#         queryset = super().get_queryset()
+#         return queryset.filter(user_id = self.request.user.id)
+
+#     def get_success_url(self):
+#         return reverse('accounts:profile_detail', kwargs={'pk':self.request.user.userprofileinfo.pk})
+
 class QuestionSearchView(QuestionsList):
 
     def get_queryset(self):
@@ -215,18 +244,6 @@ class QuestionSearchView(QuestionsList):
         if not result:
             messages.warning(self.request, 'No Records Found')
         return result
-
-
-# class DeleteQuestion(DeleteView):
-#     model = Question
-#     success_url = reverse_lazy('home')
-
-#     def get_queryset(self):
-#         queryset = super().get_queryset()
-#         return queryset.filter(user_id = self.request.user.id)
-
-#     def delete(self,*args, **kwargs):
-#         messages.success(self.request, 'Question Deleted Successfully')
         
 
 class SearchByTagView(ListView):

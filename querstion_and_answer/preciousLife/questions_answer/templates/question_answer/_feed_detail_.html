@@ -4,6 +4,7 @@
     <div class="profile_username_title_div">
 
         <div class="profile_username_div">
+            
             <a href=" {% url 'accounts:profile_detail' pk=question.user.userprofileinfo.pk %} ">
                 {% if question.user.userprofileinfo.profile_pic %}
                 <img class="profile_image" src=" {{question.user.userprofileinfo.profile_pic.url}} " alt="">
@@ -14,9 +15,6 @@
             <p class="username">@{{question.user.username}}</p>
             <p class="date">Asked: {{question.published_date}}</p>
             
-            {% if request.user == question.user %}
-                {% include 'question_answer/_delete_question_modal_.html' %}
-            {% endif %}
         </div>
     </div>
 
@@ -68,6 +66,7 @@
     <hr>
     <div class="report_div">
         <a href="#" data-toggle='tooltip' data-placement="bottom" title="Report user"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> report</a>
+        {% include 'question_answer/_delete_question_modal_.html' %}
     </div>
     <hr>
     Answers

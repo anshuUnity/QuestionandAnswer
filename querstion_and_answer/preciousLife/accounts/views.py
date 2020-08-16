@@ -13,6 +13,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from accounts.models import UserProfileInfo
+from questions_answer.models import Question, Answer
 
 
 # Create your views here.
@@ -36,10 +37,18 @@ class EditProfile(SuccessMessageMixin ,UpdateView):
     def get_object(self):
         return self.request.user.userprofileinfo
 
-
 class ProfileDetail(DetailView):
 
     model = UserProfileInfo
     context_object_name = 'profile_detail'
     template_name = 'accounts/user_profile_page.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_question = Question.objects.filter(user = self.object.user).order_by('-published_date')[:3]
+        user_answer = Answer.objects.filter(user = self.object.user).order_by('-published_at')[:3]
+        context['user_question'] = user_question
+        context['user_answer'] = user_answer
+        return context
 

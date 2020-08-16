@@ -149,6 +149,7 @@
     .report_div{
         font-size: 12px;
         font-family: Roboto, Arial, sans-serif;
+        display: flex;
     }
 
     .report_div a{
@@ -169,6 +170,10 @@
     .discription_div_answer{
         width: 80%;
         margin-top: -10px;
+    }
+
+    .dropdown_menu_icon{
+        margin-left: auto;
     }
 
     .dislike{
@@ -226,6 +231,18 @@
         height: 150px;
     }
 
+    .dropdown-menu{
+        background: #266575;
+    }
+
+    .dropdown-menu a{
+        color: white;
+    }
+
+    .delete-button{
+        margin-left: auto;
+    }
+
     @media(max-width: 400px){
         .description{
             font-size: 10px;
@@ -244,6 +261,15 @@
         .profile_image_specific_nav{
             width: 50%;
             height: 100px;
+
+        }
+
+        .dropdown_menu_icon{
+            margin-top: -5px;
+        }
+
+        .dropdown button{
+            font-size: 10px !important;
         }
     }
 </style>
@@ -253,23 +279,6 @@
     <div class="main_container">
         <div class="main_banner_div">
             
-            <!-- {% notifications_unread as unread_count %}
-            {% if unread_count %}
-                You have <strong>{{ unread_count }}</strong> unread notifications.
-            {% endif %}
-            <br>
-            {% register_notify_callbacks callbacks='fill_notification_menu,fill_notification_badge' %}
-            {% live_notify_badge %}
-            {% live_notify_list %} -->
-
-            <!-- {% for notice in unread %}
-            <li>{{notice.verb}}</li>
-            {% endfor %} -->
-
-            <!-- <h4>Read Notifications</h4>
-            {% for notice in read %}
-            <li>{{notice.description}}</li>
-            {% endfor %} -->
         </div>
         
         <div class="container question_main_div">
@@ -322,6 +331,8 @@
     </div>
 
     <script type="text/javascript">
+
+        // like ajax
         $(document).ready(function(event){
             $(document).on('click', '#like', function(event){
                 event.preventDefault();
@@ -341,7 +352,6 @@
                 });
             });
         });
-
     </script>
 
 </div>

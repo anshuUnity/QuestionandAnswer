@@ -15,13 +15,13 @@ from accounts.models import UserProfileInfo
 User = get_user_model()
 
 class Question(models.Model, HitCountMixin):
-    slug              =models.SlugField(max_length=255)
+    slug              =models.SlugField(max_length=264)
     title             =models.CharField(max_length=264, blank=False, null=False, unique=True)
     description       =models.TextField(max_length=None, blank=False, null=False)
     published_date    =models.DateTimeField()
     user              =models.ForeignKey(User, on_delete=models.CASCADE, related_name='question')
     tags              =TaggableManager(blank=True, help_text='Give the tags to the question')
-    likes             =models.ManyToManyField(User, related_name='likes') 
+    likes             =models.ManyToManyField(User, related_name='likes', blank=True) 
  
     
 
@@ -52,7 +52,7 @@ class Images(models.Model):
 
 
 class Answer(models.Model):
-    questions                = models.ForeignKey(Question, on_delete=models.CASCADE, blank=True)
+    questions               = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer_description      = models.TextField(blank=False, null=False, verbose_name='answer_desc')
     published_at            = models.DateTimeField(auto_now_add=True)
     user                    = models.ForeignKey(User, on_delete=models.CASCADE)

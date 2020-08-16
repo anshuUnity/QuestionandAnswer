@@ -1,4 +1,5 @@
 {% load notifications_tags %}
+{% if request.user.is_authenticated %}
 <div class="user_specific_navbar">
     <div class="profile_image_specific_nav">
         {% if user.userprofileinfo.profile_pic %}
@@ -20,7 +21,7 @@
                     <circle cx="4"
                         cy="4"
                         r="4"
-                        fill="#ff6b6b"
+                        fill="red"
                     ></circle>
             </svg>
             {% endif %}
@@ -29,3 +30,4 @@
         <p><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Profile</p>
     </div>
 </div>
+{% endif %}

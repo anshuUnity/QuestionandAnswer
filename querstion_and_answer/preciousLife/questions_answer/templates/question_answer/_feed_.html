@@ -14,10 +14,6 @@
             </a>
             <p class="username">@{{questions.user.username}}</p>
             <p class="date">Asked: {{questions.published_date}}</p>
-            
-            {% if request.user == questions.user %}
-            <p> <a href=" {% url 'questions_answer:update_qa' pk=questions.pk %} "> Edit<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></p>
-            {% endif %}
     </div>
 
     <div class="title_div">

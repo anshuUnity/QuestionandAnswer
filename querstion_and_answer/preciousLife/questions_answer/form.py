@@ -20,5 +20,4 @@ class ImageForm(forms.ModelForm):
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
-        fields = ('answer_description','questions')
-        widgets = {'questions': forms.HiddenInput()}
+        fields = ('answer_description',)

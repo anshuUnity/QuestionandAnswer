@@ -114,7 +114,7 @@ SUMMERNOTE_CONFIG={
 
 # hitcount limit per ip address
 # default value = 0, unlimited
-HITCOUNT_HITS_PER_IP_LIMIT = 1
+HITCOUNT_HITS_PER_IP_LIMIT = 0
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
