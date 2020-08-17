@@ -27,7 +27,7 @@
     </div>
 
     <div class="discription_div">
-        <span class="description">{{ question.description | safe }}</span>
+        <span class="description">{{ question.description|safe}}</span>
         <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="3000">
             <div class="carousel-inner" role="listbox">
                 {% for img in question.images_set.all %}
@@ -66,7 +66,9 @@
     <hr>
     <div class="report_div">
         <a href="#" data-toggle='tooltip' data-placement="bottom" title="Report user"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> report</a>
+        {% if request.user == question.user %}
         {% include 'question_answer/_delete_question_modal_.html' %}
+        {% endif %}
     </div>
     <hr>
     Answers

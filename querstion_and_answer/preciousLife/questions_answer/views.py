@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect, Http404
 from django.core.exceptions import ValidationError
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-from questions_answer.form import QuestionForm, ImageForm, AnswerForm
+from questions_answer.form import QuestionForm, AnswerForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
@@ -25,86 +25,66 @@ User = get_user_model()
 # QUESTION_ANSWER VIEWS.PY
 # Create your views here.
 
-# @method_decorator(login_required, name='dispatch')
-# class CreateQuestion(CreateView):
-#     template_name = 'question_answer/create_question.html'
-#     message      = 'Thanks, You have successfully Posted The Question'
-#     form_class    = QuestionForm
+@method_decorator(login_required, name='dispatch')
+class CreateQuestion(CreateView):
+    template_name = 'question_answer/create_question.html'
+    message      = 'Thanks, You have successfully Posted The Question'
+    form_class    = QuestionForm
 
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
-#     def get_success_url(self):
-#         messages.success(self.request, self.message)
-#         return reverse('home')
+    def get_success_url(self):
+        messages.success(self.request, self.message)
+        return reverse('home')
 
-@login_required
-def create_question_view(request):
-    ImageFormSet = modelformset_factory(Images, fields=('image',), extra=3)
-    if request.method == 'POST':
-        form = QuestionForm(request.POST)
-        formset = ImageFormSet(request.POST or None, request.FILES or None, queryset=Images.objects.none)
-        if form.is_valid() and formset.is_valid():
-            question_form = form.save(commit=False)
-            question_form.user = request.user
-            question_form.save()
+# @login_required
+# def create_question_view(request):
+#     ImageFormSet = modelformset_factory(Images, fields=('image',), extra=3)
+#     if request.method == 'POST':
+#         form = QuestionForm(request.POST)
+#         formset = ImageFormSet(request.POST or None, request.FILES or None, queryset=Images.objects.none)
+#         if form.is_valid() and formset.is_valid():
+#             question_form = form.save(commit=False)
+#             question_form.user = request.user
+#             question_form.save()
 
-            for f in formset:
-                try:
-                    photo = Images(question=question_form, image=f.cleaned_data['image'])
-                    photo.save()
-                except Exception as e:
-                    break
-            messages.success(request,'Question created successfully')
-            return redirect('home')
-    else:
-        form = QuestionForm()
-        formset = ImageFormSet(queryset=Images.objects.none())
-    context = {
-        'form':form,
-        'formset':formset
-    }
+#             for f in formset:
+#                 try:
+#                     photo = Images(question=question_form, image=f.cleaned_data['image'])
+#                     photo.save()
+#                 except Exception as e:
+#                     break
+#             messages.success(request,'Question created successfully')
+#             return redirect('home')
+#     else:
+#         form = QuestionForm()
+#         formset = ImageFormSet(queryset=Images.objects.none())
+#     context = {
+#         'form':form,
+#         'formset':formset,
+#     }
 
-    return render(request, 'question_answer/create_question.html', context)
+#     return render(request, 'question_answer/create_question.html', context)
 
 @login_required
 def update_question_view(request, pk):
     question = get_object_or_404(Question, pk=pk)
-    ImageFormSet = modelformset_factory(Images, fields=('image',), extra=3, max_num=3)
 
     if question.user != request.user:
         return Http404()
 
     if request.method == 'POST':
         form = QuestionForm(request.POST, instance=question)
-        formset = ImageFormSet(request.POST or None, request.FILES or None, queryset=Images.objects.filter(question=question))
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
             form.save()
-
-            data = Images.objects.filter(question=question)
-            for index,f in enumerate(formset):
-                if f.cleaned_data:
-                    if f.cleaned_data['id'] is None:
-                        photo = Images(question=question, image=f.cleaned_data['image'])
-                        photo.save()
-
-                    elif f.cleaned_data['image'] is False:
-                        photo = Images.objects.get(id=request.POST.get('form-' + str(index) + '-id'))
-                        photo.delete()
-                    else:
-                        photo = Images(question=question, image=f.cleaned_data['image'])
-                        d = Images.objects.get(id=data[index].id)
-                        d.image = photo.image
-                        d.save()
-
             return HttpResponseRedirect(question.get_absolute_url())
     else:
         form = QuestionForm(instance=question)
-        formset = ImageFormSet(queryset=Images.objects.filter(question=question))
+
     context = {
         'form':form,
-        'formset':formset
     }
 
     return render(request, 'question_answer/update_question.html', context)
@@ -142,7 +122,7 @@ def DeleteQuestion(request, pk):
     question.delete()
 
     # messages.success(request, 'Question Deleted Successfully')
-    return redirect('accounts:profile_detail', pk=question.user.userprofileinfo.pk)
+    return redirect('home')
 
 def delete_answer(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
@@ -151,7 +131,7 @@ def delete_answer(request, pk):
         return Http404()
     
     answer.delete()
-    return redirect('accounts:profile_detail', pk=answer.user.userprofileinfo.pk)
+    return redirect('questions_answer:question_detail', slug=answer.questions.slug)
 #################
 ##CLASS BASED VIEWS##
 ##################
@@ -159,6 +139,7 @@ class QuestionsList(ListView):
     model = Question
     template_name = 'index.html' 
     context_object_name = 'questions'
+    paginate_by = 6
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -197,10 +178,12 @@ class AnswerFormClass(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.questions_id = self.kwargs['pk']
-        notify.send(form.instance.user, recipient=form.instance.questions.user, 
-            verb=u'has answered your question', 
-            description=form.instance.answer_description, 
-            target=form.instance.questions)
+
+        if self.request.user != form.instance.questions.user:
+            notify.send(form.instance.user, recipient=form.instance.questions.user, 
+                verb=u'has answered your question', 
+                description=form.instance.answer_description, 
+                target=form.instance.questions)
         return super().form_valid(form)
 
     def get_success_url(self):

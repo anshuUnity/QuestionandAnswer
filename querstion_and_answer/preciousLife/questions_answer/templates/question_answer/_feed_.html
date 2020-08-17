@@ -21,7 +21,7 @@
     </div>
 
     <div class="discription_div">
-        <span class="description">{{questions.description|safe}}</span>
+        <span class="description">{{questions.description|urlizetrunc:35|linebreaks|truncatewords:30}}</span>
         <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="3000">
             <div class="carousel-inner" role="listbox">
                 {% for img in questions.images_set.all %}
@@ -57,5 +57,22 @@
     <br>
     <hr>
 {% endfor %}
+    <div class="pagination_class">
+        {% if is_paginated  %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+                    {% endif %}
 
+                    <span class="page-current">
+                        Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    </div>
 </div>

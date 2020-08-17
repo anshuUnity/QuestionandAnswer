@@ -33,7 +33,6 @@ urlpatterns = [
     path('questions_answer/', include('questions_answer.urls')),
     path('notice/', include('notice.urls', namespace='notice')),
 
-    path('summernote/', include('django_summernote.urls')),
     path('hitcount/', include('hitcount.urls', namespace='hitcount')),
 
     path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
@@ -58,5 +57,5 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     
-handler404 = main_views.handler404
-handler500 = main_views.handler500
+# handler404 = main_views.handler404
+# handler500 = main_views.handler500

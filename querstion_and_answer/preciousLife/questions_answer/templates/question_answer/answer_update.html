@@ -1,8 +1,87 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit", value="Confirm">
-    </form>
+
+<style>
+        .body_tag{
+        background-image: radial-gradient(circle, #45adf3, #5c71b5, #3c4254);
+    }
+
+    .image_preview{
+        width: 100%;
+        min-height: 100px;
+        border: 2px solid #dddddd;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        float: left;
+        justify-content: center;
+        font-weight: bold;
+        color: #cccccc;
+    }
+
+    .image_preview_image_tag{
+        display: none;
+        width: 100%;
+    }
+
+    .container_main{
+        margin: 5% auto 0;
+        background-color: white;
+        margin-bottom: 10px;
+    }
+
+    .edit_profile_heading{
+        text-align: center;
+        color: #d10e0e9f;
+        margin-bottom: 30px;
+    }
+
+    .container_second_main{
+        margin-top: 1rem;
+    }
+
+    .edit_profile_description{
+        width: 100%;
+        border-radius: 20px;
+        outline: none;
+        border: 1px solid #999;
+    }
+
+    .confirm_button{
+        color: #fff;
+        width: 100%;
+        padding: 10px;
+        border-radius: 20px;
+        font-size: 15px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        background-color: #1c8abd;
+    }
+</style>
+
+<div class="container container_main">
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+            <h2 class="edit_profile_heading">Edit Your Profile</h2>
+            <div class="container_second_main">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Confirm" class="confirm_button">
+                </form>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-lg-6">
+            <div class="image_preview" id="imagePreview">
+                <img src="" alt="Image Preview" class="image_preview_image_tag">
+                <span class="imagePreview__defaultText">Image Preview</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 {% endblock %}

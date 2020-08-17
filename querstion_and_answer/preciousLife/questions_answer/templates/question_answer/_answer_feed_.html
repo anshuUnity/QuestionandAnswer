@@ -21,6 +21,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         {% if answers.user == request.user %}
                             <a class="dropdown-item" href=" {% url 'questions_answer:qa_answer_update' pk=answers.pk %} ">Edit</a>
+                            <a class="dropdown-item" href=" {% url 'questions_answer:qa_answer_delete' pk=answers.pk %} ">Delete</a>
                             
                         {% else %}
                             <a class="dropdown-item" href="#">Report</a>

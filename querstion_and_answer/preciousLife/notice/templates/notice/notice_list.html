@@ -70,6 +70,7 @@
 <div class="notification_div container">
     <div class="row">
         <div class="notifications col-xl-6 col-lg-6">
+            <a class="btn btn-warning" href=" {% url 'notice:notice_update' %} ">Mark all as read</a>
             <h3>New Notifications</h3>
             {% for notice in notices %}
 

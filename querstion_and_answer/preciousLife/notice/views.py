@@ -24,7 +24,6 @@ class NotificationListView(ListView):
 
         return context
 
-@method_decorator(login_required, name='dispatch')
 class UpdateNotificationView(View):
     
     def get(self, request):
@@ -35,3 +34,7 @@ class UpdateNotificationView(View):
             question = Question.objects.get(id=request.GET.get('question_id'))
             request.user.notifications.get(id=notice_id).mark_as_read()
             return redirect(question)
+        else:
+            request.user.notifications.mark_all_as_read()
+            return redirect('notice:notice_list')
+            
