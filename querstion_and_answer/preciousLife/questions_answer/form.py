@@ -1,5 +1,5 @@
 from django import forms
-from questions_answer.models import Question, Answer
+from questions_answer.models import Question, Answer, ReportQuestion, ReportAnswer
 
 class QuestionForm(forms.ModelForm):
 
@@ -33,3 +33,19 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         fields = ('answer_description',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['answer_description'].label = ""
+        self.fields['answer_description'].widget.attrs.update({'class' : 'answer_desc', 'id':'answer'})
+        self.fields['answer_description'].widget.attrs.update({'placeholder':'Answer'})
+
+class ReportQuestionForm(forms.ModelForm):
+    class Meta:
+        model = ReportQuestion
+        fields = ('report_description',)
+
+class ReportAnswerForm(forms.ModelForm):
+    class Meta:
+        model = ReportAnswer
+        fields = ('report_description',)

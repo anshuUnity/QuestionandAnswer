@@ -41,12 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
-    'markdownx',
     'taggit',
     'hitcount',
     'guardian',
     'notifications',
-
     # my personal app
     'accounts', 
     'questions_answer',

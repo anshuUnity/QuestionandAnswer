@@ -1,5 +1,4 @@
 from django.db import models
-from markdownx.models import MarkdownxField
 from django.utils.text import slugify
 from django.urls import reverse
 from taggit.managers import TaggableManager
@@ -46,13 +45,6 @@ class Question(models.Model, HitCountMixin):
     def total_likes(self):
         return self.likes.count()
 
-class Images(models.Model):
-    question            = models.ForeignKey(Question, on_delete=models.CASCADE)
-    image             = models.ImageField(upload_to='images/', blank=True, null=True)
-
-    def __str__(self):
-        return self.question.title + ' images'
-
 
 class Answer(models.Model):
     questions               = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -64,3 +56,21 @@ class Answer(models.Model):
     def __str__(self):
         return self.answer_description
         
+class ReportQuestion(models.Model):
+    questions               = models.ForeignKey(Question, on_delete=models.CASCADE)
+    report_description      = models.TextField(blank=True, null=True, max_length=264)
+    user                    = models.ForeignKey(User, on_delete=models.CASCADE)
+    question_url            = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} '@{}' ".format(self.questions.title, self.user.username)
+
+class ReportAnswer(models.Model):
+    questions               = models.ForeignKey(Question, on_delete=models.CASCADE)
+    report_description      = models.TextField(blank=True, null=True, max_length=264)
+    answers                 = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    user                    = models.ForeignKey(User, on_delete=models.CASCADE)
+    question_url            = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} '@{}' ".format(self.questions.title, self.user.username)

@@ -1,6 +1,6 @@
 <div class="answer_feed">
-    {% if question.answer_set.all %}
-    {% for answers in question.answer_set.all %}
+    {% if object_list %}
+    {% for answers in object_list %}
     
     <div class="profile_username_title_div">
         <div class="profile_username_div">
@@ -24,7 +24,7 @@
                             <a class="dropdown-item" href=" {% url 'questions_answer:qa_answer_delete' pk=answers.pk %} ">Delete</a>
                             
                         {% else %}
-                            <a class="dropdown-item" href="#">Report</a>
+                            <a class="dropdown-item" href="{% url 'questions_answer:qa_report_answer' pk=answers.pk%}">Report</a>
                         {% endif %}
                     </div>
                 </div>
@@ -38,13 +38,32 @@
 
     <div class="discription_div_answer">
         <span class="description">{{ answers.answer_description|safe|linebreaks|urlizetrunc:35}}</span>
-             
+        <p> {{answers.pk}} </p>     
     </div>
 
     <hr>
     <br>
     
     {% endfor %}
+
+    <div class="pagination_class">
+        {% if is_paginated  %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+                    {% endif %}
+
+                    <span class="page-current">
+                        Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    </div>
     {% else %}
     <p>No answers yet</p>
     {% endif %}

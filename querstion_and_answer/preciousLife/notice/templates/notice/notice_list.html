@@ -98,8 +98,8 @@
         <div class="notification col-xl-6 col-lg-6">
             <h3>Notifications you have read</h3>
             {% for notice in read %}
+            {% if notice.target.id %}
             <a class="link" href="{% url 'notice:notice_update' %}?question_id={{notice.target.id}}&notice_id={{notice.id}}">
-
                 <div class="profile_image_notice_verb">
                     {% if notice.actor.userprofileinfo.profile_pic %}
                     <img class="profile_image" src=" {{notice.actor.userprofileinfo.profile_pic.url}} " alt="">
@@ -115,9 +115,9 @@
                 <div class="notification_date">
                     <p>{{notice.timestamp|timesince}} ago</p>
                 </div>
-                
             </a>
-            <hr>  
+            <hr> 
+            {% endif %} 
             {% endfor %}
         </div>
     </div>

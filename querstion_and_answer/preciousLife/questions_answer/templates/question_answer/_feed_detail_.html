@@ -27,15 +27,19 @@
     </div>
 
     <div class="discription_div">
-        <span class="description">{{ question.description|safe}}</span>
-        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="3000">
-            <div class="carousel-inner" role="listbox">
-                {% for img in question.images_set.all %}
-              <div class="carousel-item{% if forloop.first %}   active {% endif %} ">
-                <img class="question_images" src=" {{img.image.url}} " alt="First slide">
-              </div>
-              {% endfor %}
-            </div>
+        <span class="description">{{ question.description|urlizetrunc:35|linebreaks}}</span>
+        <div class="question_images_fields">
+            {% if question.image_first %}
+                <img class="first-image" src="{{question.image_first.url}}" alt="">
+            {% endif %}
+
+            {% if question.image_second %}
+            <img class="first-image" src="{{question.image_second.url}}" alt="">
+            {% endif %}
+
+            {% if question.image_third %}
+            <img class="first-image" src="{{question.image_third.url}}" alt="">
+            {% endif %}
         </div>
         
     </div>
@@ -65,7 +69,7 @@
     <br>
     <hr>
     <div class="report_div">
-        <a href="#" data-toggle='tooltip' data-placement="bottom" title="Report user"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> report</a>
+        <a href="{% url 'questions_answer:qa_report_question' pk=question.pk %}" data-toggle='tooltip' data-placement="bottom" title="Report user"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> report</a>
         {% if request.user == question.user %}
         {% include 'question_answer/_delete_question_modal_.html' %}
         {% endif %}

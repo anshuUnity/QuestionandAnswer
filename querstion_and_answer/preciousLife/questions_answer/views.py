@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect, Http404
 from django.core.exceptions import ValidationError
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-from questions_answer.form import QuestionForm, AnswerForm
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, View
+from django.views.generic.list import MultipleObjectMixin
+from questions_answer.form import QuestionForm, AnswerForm, ReportQuestionForm, ReportAnswerForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
@@ -15,7 +16,7 @@ from django.http import JsonResponse
 from django.db.models import Count
 from notifications.signals import notify
 
-from questions_answer.models import Question, Images, Answer
+from questions_answer.models import Question, Answer, ReportQuestion
 from django.contrib.auth import get_user_model
 from accounts.models import UserProfileInfo
 from django.forms import modelformset_factory
@@ -38,56 +39,6 @@ class CreateQuestion(CreateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('home')
-
-# @login_required
-# def create_question_view(request):
-#     ImageFormSet = modelformset_factory(Images, fields=('image',), extra=3)
-#     if request.method == 'POST':
-#         form = QuestionForm(request.POST)
-#         formset = ImageFormSet(request.POST or None, request.FILES or None, queryset=Images.objects.none)
-#         if form.is_valid() and formset.is_valid():
-#             question_form = form.save(commit=False)
-#             question_form.user = request.user
-#             question_form.save()
-
-#             for f in formset:
-#                 try:
-#                     photo = Images(question=question_form, image=f.cleaned_data['image'])
-#                     photo.save()
-#                 except Exception as e:
-#                     break
-#             messages.success(request,'Question created successfully')
-#             return redirect('home')
-#     else:
-#         form = QuestionForm()
-#         formset = ImageFormSet(queryset=Images.objects.none())
-#     context = {
-#         'form':form,
-#         'formset':formset,
-#     }
-
-#     return render(request, 'question_answer/create_question.html', context)
-
-@login_required
-def update_question_view(request, pk):
-    question = get_object_or_404(Question, pk=pk)
-
-    if question.user != request.user:
-        return Http404()
-
-    if request.method == 'POST':
-        form = QuestionForm(request.POST, instance=question)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(question.get_absolute_url())
-    else:
-        form = QuestionForm(instance=question)
-
-    context = {
-        'form':form,
-    }
-
-    return render(request, 'question_answer/update_question.html', context)
 
 @login_required
 def LikeView(request, slug):
@@ -127,11 +78,68 @@ def DeleteQuestion(request, pk):
 def delete_answer(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
 
+
     if request.user != answer.user:
         return Http404()
     
     answer.delete()
     return redirect('questions_answer:question_detail', slug=answer.questions.slug)
+
+def reportQuestion(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+
+    # correct way to get url of a previous page
+    if request.method == 'GET':
+        request.session['report_url'] = request.META.get('HTTP_REFERER')
+    
+    if request.method == 'POST':
+        
+        report_form = ReportQuestionForm(request.POST or None)
+        if report_form.is_valid():
+            
+            new_form = report_form.save(commit=False)
+            new_form.questions = question
+            new_form.user = request.user
+            new_form.question_url = request.session.get('report_url')
+            new_form.save()
+            return redirect('questions_answer:question_detail', slug=question.slug)
+
+    else:
+        report_form = ReportQuestionForm()
+
+    context = {
+        'form':report_form
+    }
+    return render(request, 'question_answer/report_question.html', context)    
+    
+def reportAnswer(request, pk):
+    answer = get_object_or_404(Answer, pk=pk)
+
+    # correct way to get url of a previous page
+    if request.method == 'GET':
+        request.session['report_url'] = request.META.get('HTTP_REFERER')
+    
+    if request.method == 'POST':
+        
+        report_form = ReportAnswerForm(request.POST or None)
+        if report_form.is_valid():
+            
+            new_form = report_form.save(commit=False)
+            new_form.questions = answer.questions
+            new_form.user = request.user
+            new_form.answers = answer
+            new_form.question_url = request.session.get('report_url')
+            new_form.save()
+            return redirect('questions_answer:question_detail', slug=answer.questions.slug)
+
+    else:
+        report_form = ReportQuestionForm()
+
+    context = {
+        'form':report_form
+    }
+    return render(request, 'question_answer/report_answer.html', context)    
+
 #################
 ##CLASS BASED VIEWS##
 ##################
@@ -149,11 +157,12 @@ class QuestionsList(ListView):
         return context
 
 
-class QuestionDetail(HitCountDetailView):
+class QuestionDetail(HitCountDetailView, MultipleObjectMixin):
     template_name = 'question_answer/question_detail.html'
     model = Question
     slug_field = 'slug'
-    form_class = AnswerForm  
+    form_class = AnswerForm
+    paginate_by = 6  
 
     try:
         count_hit = True
@@ -163,7 +172,8 @@ class QuestionDetail(HitCountDetailView):
     def get_context_data(self, *args, **kwargs):
         question = get_object_or_404(Question, slug=self.kwargs['slug'])
         total_likes = question.total_likes()
-        context = super().get_context_data(**kwargs)
+        object_list = Answer.objects.filter(questions=self.get_object()).order_by('-published_at')
+        context = super().get_context_data(object_list=object_list, **kwargs) #created object_list specially for pagination of answers
         related_question = question.tags.similar_objects()
         context['total_likes'] = total_likes
         context['related_question'] = related_question
@@ -195,19 +205,29 @@ class AnswerUpdateView(UpdateView):
     model = Answer
     template_name = 'question_answer/answer_update.html'
 
+    def get_queryset(self): 
+        query_set = super().get_queryset()
+        queryset = query_set.filter(user = self.request.user)
+        return queryset
+
     def get_success_url(self):
         return reverse('accounts:profile_detail', kwargs={'pk':self.object.user.userprofileinfo.pk})
 
-# class AnswerDeleteView(DeleteView):
-#     model = Answer
-#     template_name = 'accounts/user_profile_page.html'
+@method_decorator(login_required, name='dispatch')
+class QuestionUpdateView(UpdateView):
+    form_class = QuestionForm
+    model = Question
+    template_name = 'question_answer/update_question.html'
 
-#     def get_queryset(self, *args, **kwargs):
-#         queryset = super().get_queryset()
-#         return queryset.filter(user_id = self.request.user.id)
+    def get_queryset(self): 
+        query_set = super().get_queryset()
+        queryset = query_set.filter(user = self.request.user)
+        return queryset
 
-#     def get_success_url(self):
-#         return reverse('accounts:profile_detail', kwargs={'pk':self.request.user.userprofileinfo.pk})
+
+    def get_success_url(self):
+        return reverse('questions_answer:question_detail', kwargs={'slug':self.object.slug})
+
 
 class QuestionSearchView(QuestionsList):
 
@@ -237,5 +257,3 @@ class SearchByTagView(ListView):
     def get_queryset(self, **kwargs):
 
         return Question.objects.filter(tags__slug=self.kwargs['tag'])
- 
-     

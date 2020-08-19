@@ -18,6 +18,8 @@
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
    <link rel="stylesheet" href="{% static 'accounts/css/master.css' %}">
@@ -125,9 +127,22 @@
         </nav>
     </div>
 
+    <div class="loader" id=preloader>
+        <h1 class="title_loading">Loading</h1>
+        <div class="rainbow-marker-loader"></div>
+    </div>
+
     <div class="mycontent">
         {% block content %}
         {% endblock %}
     </div>
+
+    <script>
+        var loader = document.getElementById("preloader");
+
+        window.addEventListener('load', function(){
+            loader.style.display = 'none';
+        });
+    </script>
 </body>
 </html>

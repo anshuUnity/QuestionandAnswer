@@ -1,5 +1,5 @@
 {% load hitcount_tags %}
-<div class="question_list_feed">
+<div class="question_list_feed" id="question_list_feeds">
     {% for questions in questions %}
 
     <div class="profile_username_title_div">
@@ -22,14 +22,18 @@
 
     <div class="discription_div">
         <span class="description">{{questions.description|urlizetrunc:35|linebreaks|truncatewords:30}}</span>
-        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" data-interval="3000">
-            <div class="carousel-inner" role="listbox">
-                {% for img in questions.images_set.all %}
-              <div class="carousel-item{% if forloop.first %}   active {% endif %} ">
-                <img class="question_images" src=" {{img.image.url}} " alt="First slide">
-              </div>
-              {% endfor %}
-            </div>
+        <div class="question_images_fields">
+            {% if questions.image_first %}
+                <img class="first-image" id="image1" data-src="{{questions.image_first.url}}" alt="">
+            {% endif %}
+
+            {% if questions.image_second %}
+            <img class="first-image" id="image2" data-src="{{questions.image_second.url}}" alt="">
+            {% endif %}
+
+            {% if questions.image_third %}
+            <img class="first-image" id="image3" data-src="{{questions.image_third.url}}" alt="">
+            {% endif %}
         </div>
         
     </div>
