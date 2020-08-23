@@ -1,4 +1,6 @@
 {% load static %}
+{% load notifications_tags %}
+{% notifications_unread as unread_count %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +22,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
    <link rel="stylesheet" href="{% static 'accounts/css/master.css' %}">
@@ -31,6 +34,9 @@
 
    
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+   <!-- google recaptcha -->
+   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <style>
@@ -56,20 +62,41 @@
         border-radius: 20px;
     }
 
+    .navbar{
+        background: #7494d4;
+    }
+
+    .dropdown-menu li a{
+        color: black !important;
+    }
+
+    #notification span{
+        position: absolute;
+        margin-left: -10px;
+        background: red;
+        margin-top: -8px;
+        border-radius: 10px;
+    }
+    
    
 </style>
 
 <body class="body_tag">
 
     <div class="navigationbar">
-        <nav class="navbar navbar-expand-lg navbar-light background">
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark background scrolling-navbar">
             <a class="navbar-brand" href=" {% url 'home' %} ">Navbar</a>
+            <a class="navbar-brand" id="notification" href=" {% url 'notice:notice_list' %} "><i class="fa fa-bell-o" aria-hidden="true"></i>
+                {% if unread_count %}
+                <span class="badge"> {{unread_count}} </span>
+                {% endif %}
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto nav-list">
+                <ul class="navbar-nav mr-auto nav-list ml-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item active">
                             <a class="nav-link" href=" {% url 'home' %} ">Home <span class="sr-only">(current)</span></a>
@@ -78,34 +105,19 @@
                             <a class="nav-link" href=" {% url 'accounts:profile_detail' pk=user.userprofileinfo.pk %} ">About Us</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="#">Blog</a>
+                            <a class="nav-link" href=" {% url 'blog:blog_list' %} ">Blogs</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact Us</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:edit-profile' %}">Edit</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'questions_answer:create' %}">Create</a>
-                        </li>
-
+                        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'questions_answer:qa_search' %}">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" name="q">
+                            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </form>
 
                     {% else %}
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="#">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact Us</a>
+                            <a class="nav-link" href=" {% url 'blog:blog_list' %} ">Blogs</a>
                         </li>
 
                         <li class="nav-item">
@@ -116,20 +128,32 @@
                             <a class="nav-link" href="{% url 'accounts:register' %}">Sign Up</a>
                         </li>
 
-                
+                        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'questions_answer:qa_search' %}">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" name="q">
+                            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </form>
+                    {% endif %}
+                    
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                    <li class="dropdown">
+                        <a class=" dropdown-toggle" data-toggle="dropdown" href="#">{{user.username}} </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="{% url 'questions_answer:create' %}">New Question</a></li>
+                            <li><a href=" {% url 'blog:create_blog' %} ">Create Blog</a></li>
+                            <li><a href="{% url 'accounts:edit-profile' %}">Edit Profile</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="{% url 'accounts:logout' %}">Sign Out</a></li>
+                        </ul>
+                    </li>
                     {% endif %}
                 </ul>
-                <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'questions_answer:qa_search' %}">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search" name="q">
-                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-                </form>
             </div>
         </nav>
     </div>
 
     <div class="loader" id=preloader>
-        <h1 class="title_loading">Loading</h1>
-        <div class="rainbow-marker-loader"></div>
     </div>
 
     <div class="mycontent">

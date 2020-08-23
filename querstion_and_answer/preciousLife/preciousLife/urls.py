@@ -27,13 +27,16 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.QuestionsList.as_view(), name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    path('account/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('test/', main_views.TestPage.as_view(), name='test'),
     path('thanks/', main_views.ThanksPage.as_view(), name='thanks'),
     path('questions_answer/', include('questions_answer.urls')),
+    path('blog/', include('blog.urls')),
     path('notice/', include('notice.urls', namespace='notice')),
 
     path('hitcount/', include('hitcount.urls', namespace='hitcount')),
+
+    path('summernote/', include('django_summernote.urls')),
 
     path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     # password reset views

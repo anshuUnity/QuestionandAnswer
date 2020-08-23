@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .profile_image{
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 50%;
+    }
+    .profile_image_div{
+        display: flex;
+    }
+
+    .profile_image_div i{
+        font-size: 20px;
+        color: #000000;
+        margin-top: 5px;
+    }
+
+    .action_icons{
+        margin-left: auto;
+    }
+
+    .profile_image_div p{
+        margin-left: 5px;
+    }
+
+    .date{
+        margin-top: -20px;
+    }
+
+    .image_div img{
+        width: 100%;
+        height: 400px;
+        margin-top: 10px;
+    }
+
+    body{
+        background: white;
+    }
+
+</style>
+
+<div class="main_container">
+    
+    <div class="container blog_main_div">
+        <div class="row">
+            <div class="col-xl-2 col-lg-3 d-md-none d-lg-none d-lg-block user_specific_nav related_question">
+
+            </div>
+
+            <div class="col-xl-8 col-lg-6 col-md-9">
+                {% include 'blog/_feed_detail_blog_.html' %}
+                                
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-3 popular_feed">
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+        $("img").addClass("img-responsive");
+
+        $("img").css("max-width", "100%");
+        });
+    </script>
+</div>
+
+{% endblock %}

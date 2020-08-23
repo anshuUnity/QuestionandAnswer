@@ -1,0 +1,38 @@
+{% load hitcount_tags %}
+<div class="blog_detail_feed">
+    <section class="title_section">
+        <h4> {{blogpost.blog_title}} </h4>
+    </section>
+    <div class="profile_image_save_blog_div">
+        <div class="profile_image_div">
+            <a href=" {% url 'accounts:profile_detail' pk=blogpost.author.userprofileinfo.pk %} ">
+                {% if blogpost.author.userprofileinfo.profile_pic %}
+                <img class="profile_image" src=" {{blogpost.author.userprofileinfo.profile_pic.url}} " alt="">
+                {% else %}
+                <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                {% endif %}
+            </a>
+            <div class="username_date_div">
+                <p> {{blogpost.author.username}} </p>
+                <p class="date"> {{blogpost.published_date}} </p>
+            </div>
+            <div class="action_icons">
+                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+            </div> 
+        </div>
+    </div>
+
+    <div class="image_div">
+        {% if blogpost.header_image %}
+            <img src="{{blogpost.header_image.url}}" alt="">
+        {% else %}
+            <img src="https://images.pexels.com/photos/636243/pexels-photo-636243.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="">
+        {% endif %}
+    </div>
+
+    <div class="description_div" style="margin-top: 10px;">
+        <span> {{blogpost.blog_description|safe}} </span>
+    </div>
+</div>

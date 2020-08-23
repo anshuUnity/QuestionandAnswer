@@ -45,11 +45,19 @@ INSTALLED_APPS = [
     'hitcount',
     'guardian',
     'notifications',
+    'captcha',
+    'django_summernote',
+
     # my personal app
     'accounts', 
     'questions_answer',
     'notice',
+    'blog',
 ]
+
+# captcha settings
+RECAPTCHA_PUBLIC_KEY = '6Lcm_MAZAAAAAIl-stUcVO1DusGCNWtWlp1NmGlO'
+RECAPTCHA_PRIVATE_KEY = '6Lcm_MAZAAAAALlIvwJIHsYM4ksBTSZIHhbvdq0O'
 
 # django-guardian
 AUTHENTICATION_BACKENDS = (
@@ -69,6 +77,58 @@ GUARDIAN_RAISE_403 = True
 # hitcount limit per ip address
 # default value = 0, unlimited
 HITCOUNT_HITS_PER_IP_LIMIT = 0
+
+# sumernote settings
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+SUMMERNOTE_CONFIG = {
+    'iframe': True,
+
+
+    'summernote':{
+
+        'airMode': False,
+
+        # Change editor size
+        'width': '100%',
+        'height': '480',
+
+            'toolbar': [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture','video','hr',]],
+            ['view', ['fullscreen', 'codeview','undo', 'redo']],
+        ],
+
+         'popover':
+        {
+        
+            'image':
+            [
+                ['image', ['resizeHalf', 'resizeQuarter']],
+                ['float', ['floatRight', 'floatNone']],
+                ['remove', ['removeMedia']]
+
+            ],
+
+            'link': [
+                ['link', ['linkDialogShow', 'unlink']]
+            ],
+        },
+
+        'fontNames': ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',],
+
+        'fontSizeUnits': ['px', 'pt']
+        
+    },
+
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -165,6 +225,8 @@ LOGOUT_REDIRECT_URL = 'home'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+GOOGLE_RECAPTCHA_SECRET_KEY = '6Lc7-cAZAAAAAMXc-fjq31u1ON_3a6swLbXdK0Dy'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com' # mail service smtp

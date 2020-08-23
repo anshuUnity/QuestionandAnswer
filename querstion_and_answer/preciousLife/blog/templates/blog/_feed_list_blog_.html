@@ -1,0 +1,58 @@
+{% load hitcount_tags %}
+<div class="question_list_feed" id="question_list_feeds">
+
+    <div class="blog_list">
+        {% for blog in blogs %}
+            <div class="content_div">
+                <div class="text_div">
+                    <a class="title" href="{% url 'blog:blog_detail' slug=blog.slug %}"><h4><strong> {{blog.blog_title}} </strong></h4></a>
+                    <a href=" {% url 'accounts:profile_detail' pk=blog.author.userprofileinfo.pk %} ">
+                        <p class="username"> @{{blog.author.username}} </p>
+                    </a>
+                    <p class="timestamp"> {{blog.published_date|timesince}} ago</p>
+                    <div class="views_like_comment">
+                        <i class="fa fa-eye" aria-hidden="true">  3</i> 
+                        <i class="fa fa-heart" aria-hidden="true">  3</i> 
+                        <i class="fa fa-envelope" aria-hidden="true">  3</i>
+                        <i class="fa fa-bookmark-o" aria-hidden="true"></i>  
+                    </div>
+
+                    <ul class="tag_list">
+                        {% for tag in blog.tags.all %}
+                        <li class="tag_list_items">
+                            <a href="#">{{tag}}</a>                
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="image_div">
+                    {% if blog.header_image %}
+                        <img data-src="{{blog.header_image.url}}" alt="">
+                    {% else %}
+                        <img data-src="https://images.pexels.com/photos/636243/pexels-photo-636243.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="">
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+
+    <div class="pagination_class">
+        {% if is_paginated  %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+                    {% endif %}
+
+                    <span class="page-current">
+                        Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    </div>
+</div>

@@ -25,10 +25,20 @@
   <div class="form-sign-up">
     <form method="POST">
       {% csrf_token %}
+      
       {{form.as_p}}
+      <input type="checkbox" id="myCheck" name="test" required>
       <input type="submit" value="Sign Up" class="signup-button">
     </form>  
   </div>
+
+  <script>
+
+    function myFunction() {
+      var x = document.getElementById("myCheck").required;
+      document.getElementById("demo").innerHTML = x;
+    }
+    </script>
 </div>
 
 {% endif %}
