@@ -84,6 +84,11 @@
                     <form action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.as_p }}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
                         <input type="submit" value="Confirm" class="confirm_button">
                     </form>
                 </div>

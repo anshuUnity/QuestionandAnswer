@@ -1,0 +1,72 @@
+<div class="answer_feed">
+    {% if blogpost.commentblogpost_set.all %}
+    {% for comment in blogpost.commentblogpost_set.all %}
+    <div class="single_comment_div">
+        <div class="profile_username_title_div">
+            <div class="profile_username_div">
+                <a href=" {% url 'accounts:profile_detail' pk=comment.user.userprofileinfo.pk %} ">
+                    {% if comment.user.userprofileinfo.profile_pic %}
+                    <img class="profile_image" src=" {{comment.user.userprofileinfo.profile_pic.url}} " alt="">
+                    {% else %}
+                    <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                    {% endif %}
+                </a>
+                <p class="username">@{{comment.user.username}}</p>
+                
+                <div class="dropdown_menu_icon">
+                    <div class="dropdown">
+                        <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            {% if comment.user == request.user %}
+                                <a class="dropdown-item" href=" {% url 'blog:edit_blog_comment' pk=comment.pk %} ">Edit</a>
+                                <a class="dropdown-item" href=" {% url 'blog:delete_blog_comment' pk=comment.pk %} ">Delete</a>
+                            {% elif comment.blogpost.author == request.user %}
+                                <a class="dropdown-item" href=" {% url 'blog:delete_blog_comment' pk=comment.pk %} ">Delete</a>   
+                            {% else %}
+                                <a class="dropdown-item" href="{% url 'questions_answer:qa_report_answer' pk=comment.pk%}">Report</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="answer_published_div">
+            <p class="date_answer">Answer added on: {{comment.published_date}}</p>
+        </div>
+    
+        <div class="discription_div_answer">
+            <span class="description">{{ comment.comment_content|linebreaks|urlizetrunc:35}}</span>
+    
+        </div>
+    </div>
+
+    <hr>
+    <br>
+    
+    {% endfor %}
+
+    <div class="pagination_class">
+        {% if is_paginated  %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+                    {% endif %}
+
+                    <span class="page-current">
+                        Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <p>No Comments yet</p>
+    {% endif %}
+</div>

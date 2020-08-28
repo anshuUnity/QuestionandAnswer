@@ -1,0 +1,15 @@
+<div class="like_form_counts">
+    <form method="POST"  action=" {% url 'blog:likes' blogpost.slug %} ">
+        {% csrf_token %}
+        {% if request.user in blogpost.likes.all %}
+        <button class="views_reply dislike" id="like" type="submit" name="blogpost_id" value="{{ blogpost.id }}">
+            <i class="fa fa-heart" style="color: red;"></i>
+        </button>
+        {% else %}
+        <button class="views_reply dislike" id="like" type="submit" name="blogpost_id" value="{{ blogpost.id }}">
+            <i class="fa fa-heart-o" style="color: red;"></i>
+        </button>
+        {% endif %}
+    </form>
+    <p> {{blogpost.likes.count}} Like{{blogpost.likes.count|pluralize}}</p>
+</div>

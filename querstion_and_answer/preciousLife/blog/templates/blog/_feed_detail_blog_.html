@@ -17,9 +17,19 @@
                 <p class="date"> {{blogpost.published_date}} </p>
             </div>
             <div class="action_icons">
-                <i class="fa fa-heart-o" aria-hidden="true"></i>
-                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
-                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                <div class="like_image" id="like-section">
+                    {% include 'blog/_like_snippet_blog_.html' %}
+                </div>
+                <div class="like_image" id="save-section" style="margin-left: 5px;">
+                    {% include 'blog/_save_blog_feed_.html' %}
+                </div>
+                <br>
+                <div class="like_image" id="like-section">
+                    {% if request.user == blogpost.author %}
+                    {% include 'blog/_delete_blog_modal_.html' %}
+                    {% endif %}
+                </div>
+
             </div> 
         </div>
     </div>
@@ -35,4 +45,13 @@
     <div class="description_div" style="margin-top: 10px;">
         <span> {{blogpost.blog_description|safe}} </span>
     </div>
+    <h4><strong>Comments</strong></h4>
+    <div class="include_comment">
+        {% include 'blog/_comment_feed_.html' %}
+    </div>
+    <form method="POST" style="margin-bottom: 10px;">
+        {% csrf_token %}
+        {{comment_form.as_p}}
+        <input type="submit" value="Post a comment" class="comment_post_btn">
+    </form>
 </div>

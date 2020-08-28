@@ -1,0 +1,60 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+
+    body{
+        background: url("{% static 'preciousLife/images/comment_update.jpg' %}") no-repeat center center fixed;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        margin-left: auto;
+    }
+
+    .comment_content{
+        width: 100%;
+        height: 300px;
+
+    }
+
+    .comment_post_btn{
+        width: 100%;
+        height: 40px;
+        background: #2d6ff7;
+        color: white;
+        border: none;
+    }
+
+    .comment_post_btn:hover{
+        background: #7c7f85;
+    }
+
+    .form_div{
+        margin-top: 80px;
+        opacity: 0.8;
+    }
+</style>
+
+<div class="form_div container">
+    <div class="row">
+        <div class="col-xl-2 col-lg-3">
+        </div>
+
+        <div class="col-xl-8 col-lg-6 col-md-9">
+            <form method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Confirm" class="comment_post_btn">
+            </form>
+        </div>
+
+        <div class="col-xl-2 col-lg-3 col-md-3">
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

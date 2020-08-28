@@ -1,0 +1,8 @@
+<div class="like_form_counts">
+    <form method="POST"  action=" {% url 'questions_answer:likes' answers.questions.slug %} ">
+        {% csrf_token %}
+            <button class="views_reply dislike" id="like" type="submit" name="answer_id" value="{{ answers.id }}"><i class="fa fa-heart"></i></button>
+    </form>
+</div>
+
+

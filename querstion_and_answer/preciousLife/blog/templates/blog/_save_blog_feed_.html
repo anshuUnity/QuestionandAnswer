@@ -1,0 +1,14 @@
+<div class="like_form_counts">
+    <form method="POST"  action=" {% url 'blog:save_blog' blogpost.slug %} ">
+        {% csrf_token %}
+        {% if request.user in blogpost.favorite.all %}
+        <button class="views_reply dislike" id="save" type="submit" name="blogpost_id" value="{{ blogpost.id }}">
+            <i class="fa fa-bookmark"></i>
+        </button>
+        {% else %}
+        <button class="views_reply dislike" id="save" type="submit" name="blogpost_id" value="{{ blogpost.id }}">
+            <i class="fa fa-bookmark-o"></i>
+        </button>
+        {% endif %}
+    </form>
+</div>

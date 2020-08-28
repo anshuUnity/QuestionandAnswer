@@ -14,6 +14,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from accounts.models import UserProfileInfo
 from questions_answer.models import Question, Answer
+from blog.models import BlogPost
 
 
 # Create your views here.
@@ -32,10 +33,12 @@ class EditProfile(SuccessMessageMixin ,UpdateView):
     # fields = ['description', 'full_name', 'website', 'profile_pic', 'gender',]
     template_name = 'accounts/edit_profile.html'
     form_class = UserProfileForm
-    success_url = reverse_lazy('home')
 
     def get_object(self):
         return self.request.user.userprofileinfo
+
+    def get_success_url(self):
+        return reverse('accounts:profile_detail', kwargs={'pk': self.object.pk})
 
 class ProfileDetail(DetailView):
 
@@ -46,9 +49,13 @@ class ProfileDetail(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        user_question = Question.objects.filter(user = self.object.user).order_by('-published_date')[:3]
-        user_answer = Answer.objects.filter(user = self.object.user).order_by('-published_at')[:3]
+        user_question = Question.objects.filter(user = self.object.user).order_by('-published_date')
+        user_answer = Answer.objects.filter(user = self.object.user).order_by('-published_at')
+        user_blog = BlogPost.objects.filter(author = self.object.user).order_by('-published_date')
+        save_blog = BlogPost.objects.filter(favorite=self.request.user)
         context['user_question'] = user_question
         context['user_answer'] = user_answer
+        context['user_blog'] = user_blog
+        context['save_blog'] = save_blog
         return context
 

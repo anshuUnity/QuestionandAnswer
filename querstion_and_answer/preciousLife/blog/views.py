@@ -1,14 +1,85 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, Http404
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, Http404, redirect
 from django.urls import reverse
-from blog.forms import BlogForm
-from blog.models import BlogPost
+from blog.forms import BlogForm, CommentBlogForm
+from blog.models import BlogPost, CommentBlogPost
 from django.views.generic import ListView, View, DetailView,UpdateView,DeleteView, CreateView
 from hitcount.views import HitCountDetailView
+from django.db.models import Q
+from taggit.models import Tag
+from django.contrib import messages
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.views.generic.edit import FormMixin
 
 # Create your views here.
+
+######################
+# function based views
+######################
+
+@login_required
+def like_blog(request, slug):
+    blogpost = get_object_or_404(BlogPost, id=request.POST.get('blogpost_id'))
+
+    if blogpost.likes.filter(id=request.user.id).exists():
+        blogpost.likes.remove(request.user)
+    
+    else:
+        blogpost.likes.add(request.user)
+
+    context = {
+        'blogpost':blogpost,
+    }
+
+    if request.is_ajax():
+        html = render_to_string('blog/_like_snippet_blog_.html', context, request=request)
+        return JsonResponse({'form':html})
+
+
+
+@login_required
+def save_blog(request, slug):
+    blogpost = get_object_or_404(BlogPost, id = request.POST.get('blogpost_id'))
+
+    if blogpost.favorite.filter(id=request.user.id).exists():
+        blogpost.favorite.remove(request.user)
+    
+    else:
+        blogpost.favorite.add(request.user)
+    
+    context = {
+        'blogpost':blogpost
+    }
+
+    if request.is_ajax():
+        html = render_to_string('blog/_save_blog_feed_.html', context, request=request)
+        return JsonResponse({'form':html})
+
+def delete_blog(request, pk):
+    blog = get_object_or_404(BlogPost, pk=pk)
+
+
+
+    if request.user != blog.author:
+        return Http404()
+    
+    blog.delete()
+    return redirect('blog:blog_list')
+
+def delete_comment(request, pk):
+    comment = get_object_or_404(CommentBlogPost, pk=pk)
+
+
+
+    if request.user == comment.user or request.user == comment.blogpost.author:
+        comment.delete()
+    else:
+        return Http404()
+    
+    return redirect('blog:blog_detail', slug = comment.blogpost.slug)
 
 @method_decorator(login_required, name='dispatch')
 class CreateBlog(CreateView):
@@ -27,12 +98,100 @@ class BlogList(ListView):
     template_name = 'blog/blog_list.html'
     context_object_name = 'blogs'
 
-class BlogDetail(HitCountDetailView):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        trending_blog = BlogPost.objects.order_by('-hit_count_generic__hits')[:7]
+        context['popular_tags'] = BlogPost.tags.most_common()[:25]
+        context['trending_blog'] = trending_blog
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class BlogUpdateView(UpdateView):
+    form_class = BlogForm
+    model = BlogPost
+    template_name = 'blog/update_blog.html'
+
+    def get_queryset(self):
+        query_set = super().get_queryset()
+        queryset = query_set.filter(author = self.request.user)
+        return queryset
+
+    def get_success_url(self):
+        return reverse('blog:blog_detail', kwargs={'slug':self.object.slug})
+
+class BlogDetail(HitCountDetailView, FormMixin):
     template_name = 'blog/blog_detail.html'
     model = BlogPost
     slug_field = 'slug'
+    form_class = CommentBlogForm
 
     try:
         count_hit = True
     except:
         print('could not count the view')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = CommentBlogForm
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.blogpost = self.object
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('blog:blog_detail', kwargs={'slug': self.object.slug})
+
+
+class EditCommentBlog(UpdateView):
+    model = CommentBlogPost
+    form_class = CommentBlogForm
+    template_name = 'blog/update_comment_blog.html'
+
+    def get_queryset(self):
+        query_set = super().get_queryset()
+        queryset = query_set.filter(user = self.request.user)
+        return queryset
+
+    def get_success_url(self):
+        return reverse('blog:blog_detail', kwargs={'slug':self.object.blogpost.slug})
+    
+
+class BlogSearchView(BlogList):
+
+    def get_queryset(self):
+        result = super(BlogSearchView, self).get_queryset()
+        query = self.request.GET.get('q')
+
+        if query:
+            query_set = query.split(' ')
+
+            for q in query_set:
+                result = BlogPost.objects.filter(
+                    Q(blog_description__icontains=q)|
+                    Q(blog_title__icontains=q)|
+                    Q(tags__name__icontains=q)
+                ).distinct()
+        if not result:
+            messages.warning(self.request, 'No Records Found')
+        return result
+
+class SearchByTagView(ListView):
+    model = BlogPost
+    template_name = 'blog/tag_list.html'
+    context_object_name = 'blogpost'
+
+    def get_queryset(self, **kwargs):
+        return BlogPost.objects.filter(tags__slug=self.kwargs['tag'])

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block content %}
 
@@ -100,6 +100,73 @@
         border-radius: 2px;
     }
 
+    .popular_question{
+        margin-top: 10px;
+        margin-left: -10px;
+        background: white;
+    }
+
+    .image_title_div{
+        margin-left: 10px;
+        margin-right: 5px;
+        font-size: 14px;
+        display: flex;
+    }
+
+    .image_title_div p{
+        color: #272930;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 22px;
+        margin-left: 10px;
+    }
+    .profile_image_popular{
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    /* popular_feed styling */
+    .trending_tags{
+       margin-left: -10px;
+       background-color: white;
+    }
+    .trending_heading{
+        margin-left: 10px;
+    }
+
+    .tags_name{
+        margin-left: 10px;
+        padding: 10px;
+    }
+
+    .tags_name li{
+        list-style: none;
+        display: inline;
+    }
+
+    .tags_name li a {
+        font-size: 11px;
+        color: #7c7f85;
+        text-decoration: none;
+        padding: 4px;
+        border: 1px solid #7c7f85;
+        border-radius: 2px;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 30px;
+    }
+    .tags_name li a:hover {
+        font-size: 11px;
+        color: white;
+        text-decoration: none;
+        padding: 4px;
+        border: 1px solid #2d6ff7;
+        background: #2d6ff7;
+        border-radius: 2px;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 30px;
+    }
+
     @media(max-width: 500px){
         .text_div h4{
         font-size: 14px;
@@ -127,7 +194,41 @@
                                 
             </div>
             <div class="col-xl-3 col-lg-3 col-md-3 popular_feed">
-
+                <div class="trending_tags">
+                    <div class="trending_heading">
+                        <p><i class="fa fa-tags"></i> Trending Tags</p>
+                    </div>
+                    <div class="tags_name"> 
+                        {% for tags in popular_tags %}   
+                        <li><a href="{% url 'blog:blog_tag' tags.slug %}">{{tags}}</a></li>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="popular_question">
+                    <div class="trending_heading">
+                        <p>Popular Blogs</p>
+                    </div>
+                    <div class="popular_questions_feed">
+                    {% for trends in trending_blog %}
+                        <div class="image_title_div">
+                            <div class="popular_profile_image">
+                                <a href=" {% url 'accounts:profile_detail' pk=trends.author.userprofileinfo.pk %} ">
+                                {% if trends.author.userprofileinfo.profile_pic %}
+                                <img class="profile_image_popular" src=" {{trends.author.userprofileinfo.profile_pic.url}} " alt="">
+                                {% else %}
+                                <img class="profile_image_popular" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                                {% endif %}
+                                </a>
+                            </div>
+                            <a href="{% url 'blog:blog_detail' slug=trends.slug %}"><p> {{trends.blog_title}} </p></a>
+                        </div>
+                        <!-- <div class="answer_count_popular_div">
+                            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    {{trends.answer_set.count}} Answers</p>
+                        </div> -->
+                        <hr>
+                    {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
