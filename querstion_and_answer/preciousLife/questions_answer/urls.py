@@ -16,5 +16,6 @@ urlpatterns = [
     path('edit/<int:pk>/answer/', views.AnswerUpdateView.as_view(), name='qa_answer_update'),
     path('delete/<int:pk>/answer/', views.delete_answer, name='qa_answer_delete'),
     path('report/<int:pk>/question/', views.reportQuestion, name='qa_report_question'),
-    path('report/<int:pk>/answer/', views.reportAnswer, name='qa_report_answer')
+    path('report/<int:pk>/answer/', views.reportAnswer, name='qa_report_answer'),
+    path('mark/<int:pk>/answer', views.mark_answer, name = 'mark_answer')
 ]

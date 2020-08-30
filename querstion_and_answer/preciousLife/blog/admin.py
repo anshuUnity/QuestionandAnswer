@@ -6,6 +6,7 @@ from django_summernote.admin import SummernoteModelAdmin
 
 class BlogAdmin(SummernoteModelAdmin):
     summernote_fields = ('blog_description',)
+    list_display = ('blog_title','pk')
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('published_date','comment_content')

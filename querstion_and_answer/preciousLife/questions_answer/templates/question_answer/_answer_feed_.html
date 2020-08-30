@@ -12,6 +12,12 @@
                 {% endif %}
             </a>
             <p class="username">@{{answers.user.username}}</p>
+            {% if answers.isBestAnswer %}
+            <p class="username" 
+                style="margin-left:auto; background: #f30202; color: white; height: 20px; font-family: Open Sans, Arial, sans-serif; font-size: 14px;">
+                Inspiring
+            </p>
+            {% endif %}
             
             <div class="dropdown_menu_icon">
                 <div class="dropdown">
@@ -22,7 +28,9 @@
                         {% if answers.user == request.user %}
                             <a class="dropdown-item" href=" {% url 'questions_answer:qa_answer_update' pk=answers.pk %} ">Edit</a>
                             <a class="dropdown-item" href=" {% url 'questions_answer:qa_answer_delete' pk=answers.pk %} ">Delete</a>
-                            
+                        {% elif answers.questions.user == request.user %}
+                            <a class="dropdown-item" href=" {% url 'questions_answer:mark_answer' pk=answers.pk %} ">Mark</a>
+                            <a class="dropdown-item" href=" {% url 'questions_answer:qa_answer_delete' pk=answers.pk %} ">Delete</a>
                         {% else %}
                             <a class="dropdown-item" href="{% url 'questions_answer:qa_report_answer' pk=answers.pk%}">Report</a>
                         {% endif %}
@@ -37,7 +45,7 @@
     </div>
 
     <div class="discription_div_answer">
-        <span class="description">{{ answers.answer_description|safe|linebreaks|urlizetrunc:35}}</span>
+        <span class="description">{{ answers.answer_description|linebreaks|urlizetrunc:35}}</span>
 
     </div>
 

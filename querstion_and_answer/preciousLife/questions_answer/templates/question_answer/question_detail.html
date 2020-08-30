@@ -301,7 +301,7 @@
         
         <div class="container question_main_div">
             <div class="row">
-                <div class="col-xl-2 d-lg-none d-xl-block d-md-none user_specific_nav">
+                <div class="col-xl-2 d-none d-sm-block d-lg-none d-xl-block d-md-none user_specific_nav">
                     {% include 'question_answer/_user_specific_nav.html' %}
                 </div>
                 <div class="col-xl-7 col-lg-8 col-md-9 question_feed shadow p-3 mb-5 bg-white">
@@ -375,12 +375,4 @@
 </div>
 
 {% endblock %}
-<!-- 
-<div class="question_description">
-    {{ question.description | safe }}
-    {{ hitcount.total_hits }}
-    {{question.user.username}}
-    {% for tag in question.tags.all %}
-    <p> {{tag}} </p>
-    {% endfor %}
-</div> -->
+{% block title %}{{question.title}}{% endblock %}

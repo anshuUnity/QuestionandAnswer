@@ -1,16 +1,53 @@
-{% extends 'base.html' %}
-
+{% extends 'base2.html' %}
 {% block content %}
+<style>
+    /* getting ids from page source */
+    #id_blog_title{
+        width: 100%;
+        border-radius: 10px;
+        outline: none;
+    }
 
-<div class="container">
-    <form method="POST" enctype="multipart/form-data">
+    #id_tags{
+        width: 100%;
+        border-radius: 10px;
+        outline: none;
+    }
+
+
+    .blog_button{
+        width: 100%;
+        height: 40px;
+        background: #2d6ff7;
+        color: white;
+        border: none;
+    }
+
+    .blog_button:hover{
+        background: #7c7f85;
+    }
+
+    .progress{
+        height: 30px;
+    }
+
+</style>
+
+<div class="container my_conatiner">
+    <form method="POST" class="form-group" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
-        <input type="submit" value="Submit" class="btn btn-primary">
+        <input type="submit" value="Submit" class="blog_button">
     </form>
     
     {{form.media}}
+    <div class="progress">
+        <div class="bar"></div >
+        <div class="percent">Anshu 0%</div >
+    </div>
+    <div id="status"></div>
 </div>
+
 
 
 {% endblock  %}

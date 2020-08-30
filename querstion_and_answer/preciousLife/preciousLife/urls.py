@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 import notifications.urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('preciousLyfeAdministration/', admin.site.urls),
     path('', views.QuestionsList.as_view(), name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('accounts/', include('django.contrib.auth.urls')),

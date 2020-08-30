@@ -74,6 +74,7 @@
             <h3>New Notifications</h3>
             {% for notice in notices %}
 
+            {% if notice.verb == 'has answered your question' %}
             <a class="link" href="{% url 'notice:notice_update' %}?question_id={{notice.target.id}}&notice_id={{notice.id}}">
 
                 <div class="profile_image_notice_verb">
@@ -92,13 +93,36 @@
                 </div>
                 
             </a>
-            <hr>           
+            
+            <hr> 
+            {% else %}
+            <a class="link" href="{% url 'notice:notice_update' %}?post_id={{notice.target.id}}&notice_id={{notice.id}}">
+
+                <div class="profile_image_notice_verb">
+                    {% if notice.actor.userprofileinfo.profile_pic %}
+                    <img class="profile_image" src=" {{notice.actor.userprofileinfo.profile_pic.url}} " alt="">
+                    {% else %}
+                    <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                    {% endif %}
+                    <p>{{notice.actor|title}} {{notice.verb}},</p>
+                </div>
+                <div class="question_desc">
+                    <p style="color: #229c4f;"> "{{notice.description|truncatechars:50}}" </p>
+                </div>
+                <div class="notification_date">
+                    <p>{{notice.timestamp|timesince}} ago</p>
+                </div>
+                
+            </a>
+            
+            <hr> 
+            {% endif %}          
             {% endfor %}
         </div>
         <div class="notification col-xl-6 col-lg-6">
             <h3>Notifications you have read</h3>
             {% for notice in read %}
-            {% if notice.target.id %}
+            {% if notice.target.id and notice.verb == 'has answered your question'  %}
             <a class="link" href="{% url 'notice:notice_update' %}?question_id={{notice.target.id}}&notice_id={{notice.id}}">
                 <div class="profile_image_notice_verb">
                     {% if notice.actor.userprofileinfo.profile_pic %}
@@ -116,7 +140,26 @@
                     <p>{{notice.timestamp|timesince}} ago</p>
                 </div>
             </a>
-            <hr> 
+            <hr>
+            {% elif notice.target.id and notice.verb == 'Commented on your blog' %} 
+            <a class="link" href="{% url 'notice:notice_update' %}?post_id={{notice.target.id}}&notice_id={{notice.id}}">
+                <div class="profile_image_notice_verb">
+                    {% if notice.actor.userprofileinfo.profile_pic %}
+                    <img class="profile_image" src=" {{notice.actor.userprofileinfo.profile_pic.url}} " alt="">
+                    {% else %}
+                    <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                    {% endif %}
+                    <p>{{notice.actor|title}} {{notice.verb}},</p>
+                    
+                </div>
+                <div class="question_desc">
+                    <p style="color: #229c4f;"> "{{notice.description|truncatechars:50}}" </p>
+                </div>
+                <div class="notification_date">
+                    <p>{{notice.timestamp|timesince}} ago</p>
+                </div>
+            </a>
+            <hr>
             {% endif %} 
             {% endfor %}
         </div>
@@ -125,15 +168,6 @@
 {% endif %}
 
 {% endblock %}
-
-<!-- {% for notice in notices %}
-<a href="{% url 'notice:notice_update' %}?question_id={{notice.target.id}}&notice_id={{notice.id}}">
-    <p> {{notice.verb}} </p>
-    <p> {{notice.actor}} </p>
-    <p> {{notice.id}} </p>
-    <p> {{notice.target.id}} </p>
-    <p> {{notice.timestamp|timesince}} ago </p>
-    <p> {{notice.actor.userprofileinfo.full_name}} </p>
-</a>
-<hr>
-{% endfor %} -->
+{% block title %}
+Notifications
+{% endblock %}

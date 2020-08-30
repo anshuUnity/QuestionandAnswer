@@ -3,7 +3,8 @@ from django.utils.text import slugify
 from django.urls import reverse
 from taggit.managers import TaggableManager
 from django.utils import timezone
-from hitcount.models import HitCountMixin
+from hitcount.models import HitCountMixin, HitCount
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 from django.contrib.auth import get_user_model
@@ -23,7 +24,10 @@ class Question(models.Model, HitCountMixin):
     image_third       =models.ImageField(blank=True, null=True, upload_to = 'question_images')
     user              =models.ForeignKey(User, on_delete=models.CASCADE, related_name='question')
     tags              =TaggableManager(blank=True, help_text='Give the tags to the question')
-    likes             =models.ManyToManyField(User, related_name='likes', blank=True) 
+    likes             =models.ManyToManyField(User, related_name='likes', blank=True)
+    hit_count_generic = GenericRelation(
+        HitCount, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation') 
  
     
 

@@ -17,7 +17,7 @@
     </div>
 
     <div class="title_div">
-        <a href="{% url 'questions_answer:question_detail' slug=questions.slug %}"><p class="title"> {{questions.title}} </p></a>
+        <p><a href="{% url 'questions_answer:question_detail' slug=questions.slug %}"> {{questions.title}} </a></p>
     </div>
 
     <div class="discription_div">
@@ -60,20 +60,20 @@
     </div>
     <br>
     <hr>
-{% endfor %}
+    {% endfor %}
     <div class="pagination_class">
         {% if is_paginated  %}
             <div class="pagination">
                 <span class="page-links">
                     {% if page_obj.has_previous %}
-                        <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+                        <a href="?page={{page_obj.previous_page_number}}"><i class="fa fa-chevron-left"></i></a>
                     {% endif %}
 
                     <span class="page-current">
                         Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
                     </span>
                     {% if page_obj.has_next %}
-                        <a href="?page={{page_obj.next_page_number}}">Next</a>
+                        <a href="?page={{page_obj.next_page_number}}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                     {% endif %}
                 </span>
             </div>

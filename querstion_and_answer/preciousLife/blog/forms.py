@@ -6,7 +6,7 @@ class BlogForm(forms.ModelForm):
     
     class Meta:
         model = BlogPost
-        fields = ("blog_title","blog_description", "header_image", "tags",)
+        fields = ("blog_title","header_image", "blog_description", "tags",)
 
         widgets = {
             'blog_description': SummernoteWidget

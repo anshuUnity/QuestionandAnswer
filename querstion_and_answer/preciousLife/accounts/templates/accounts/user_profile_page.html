@@ -225,10 +225,14 @@
     /* .tab_container_area{} */
     .tab_container{
         display: none;
-    }    
+    } 
+    
+    footer{
+        display: none;
+    }
 
 </style>
-<header class="main_header_profile_page">
+<div class="main_header_profile_page">
     <div class="alert" id="alert_dialog">
         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
         <strong>Oops!</strong> User has not given the link.
@@ -271,7 +275,7 @@
 
     <div class="container container_tab">
         <ul class="tab_navigation">
-            <li class="active">Your Questions</li>
+            <li class="active">Questions</li>
             <li>Your Blogs</li>
             {% if request.user == profile_detail.user %}
             <li>Saved Blogs</li>
@@ -284,7 +288,7 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-6">
                             {% if user_question %}
-                                <h4> <strong>Your Question</strong> </h4>
+                                <h4> <strong>Question</strong> </h4>
                                 {% for question in user_question %}
                                 
                                     <div class="question_content shadow-sm p-3 mb-5 bg-white rounded">
@@ -308,7 +312,7 @@
                         </div>
                         <div class="col-xl-6 col-lg-6">
                             {% if user_answer %}
-                            <h4> <strong>Answers You have Given</strong> </h4>
+                            <h4> <strong>Answers</strong> </h4>
                             {% for answer in user_answer %}
                                     <div class="question_content shadow-sm p-3 mb-5 bg-white rounded">
                                         <div class="title_edit_div">
@@ -338,7 +342,7 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-6">
                             {% if user_blog %}
-                                <h4> <strong>Your Blogs</strong> </h4>
+                                <h4> <strong>Blogs</strong> </h4>
                             {% for blog in user_blog %}
                                     <div class="question_content shadow-sm p-3 mb-5 bg-white rounded">
                                         <div class="title_edit_div">
@@ -424,7 +428,7 @@
         });
     </script>
 
-</header>
+</div>
 
 {% endblock %}
 

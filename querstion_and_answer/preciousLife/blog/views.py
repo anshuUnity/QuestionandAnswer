@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.views.generic.edit import FormMixin
+from notifications.signals import notify
 
 # Create your views here.
 
@@ -83,6 +84,7 @@ def delete_comment(request, pk):
 
 @method_decorator(login_required, name='dispatch')
 class CreateBlog(CreateView):
+    model = BlogPost
     form_class = BlogForm
     template_name = 'blog/create_blog.html'
 
@@ -97,6 +99,7 @@ class BlogList(ListView):
     model = BlogPost
     template_name = 'blog/blog_list.html'
     context_object_name = 'blogs'
+    paginate_by = 6
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -148,6 +151,14 @@ class BlogDetail(HitCountDetailView, FormMixin):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.blogpost = self.object
+
+        if self.request.user != form.instance.blogpost.author:
+            notify.send(form.instance.user,
+                recipient=form.instance.blogpost.author,
+                verb=u'Commented on your blog',
+                description=form.instance.comment_content,
+                target=form.instance.blogpost)
+
         form.save()
         return super().form_valid(form)
 
@@ -192,6 +203,7 @@ class SearchByTagView(ListView):
     model = BlogPost
     template_name = 'blog/tag_list.html'
     context_object_name = 'blogpost'
+    paginate_by = 6
 
     def get_queryset(self, **kwargs):
         return BlogPost.objects.filter(tags__slug=self.kwargs['tag'])

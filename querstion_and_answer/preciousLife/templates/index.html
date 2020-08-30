@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 {% load hitcount_tags %}
 
@@ -252,18 +253,6 @@
 
 </style>
 
-<div class="messages">
-    {% if messages %}
-
-        {% for message in messages %}
-
-            <p class="alert alert-{{message.tags}}">{{message}}</p>
-
-        {% endfor %}
-
-    {% endif %}
-</div>
-
 
 <div class="main_container">
     <div class="main_banner_div">
@@ -331,9 +320,9 @@
             rootMargin: '-100px',
             threshold: 0.5
         });
-
-        
     </script>
 </div>
 
 {% endblock %}
+
+{% block title %}Precious Lyfe{% endblock %}

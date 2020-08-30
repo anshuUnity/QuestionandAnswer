@@ -5,13 +5,13 @@ from questions_answer.models import Question, Answer, ReportQuestion, ReportAnsw
 
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ('question','image')
+    list_display = ('title','pk')
     
 
-admin.site.register(Question)
+admin.site.register(Question,ImageAdmin)
 
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('answer_description','published_at','isBestAnswer','user','published_at')
+    list_display = ('answer_description','published_at','isBestAnswer','user','pk',)
     search_fields = ['answer_description', 'user__username']
 
 admin.site.register(Answer, AnswerAdmin)

@@ -1,6 +1,7 @@
 {% extends 'base2.html' %}
-
+{% load static %}
 {% block content %}
+
 
 <style>
 
@@ -14,6 +15,19 @@
 
     .view_reply_div{
         display: flex;
+    }
+
+    .views_reply{
+        margin-left: 10px;
+        font-size: 12px;
+        color: #7c7f85;
+        line-height: 15px;
+        padding: 8px;
+        margin-top: 10px;
+        font-family: "Open Sans", Arial, sans-serif;
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        border-radius: 2px;
     }
     
     .content_div{
@@ -167,6 +181,11 @@
         line-height: 30px;
     }
 
+    .answer_count_popular_div p{
+        margin-left: 30px;
+        margin-top: -10px;
+    }
+
     @media(max-width: 500px){
         .text_div h4{
         font-size: 14px;
@@ -222,9 +241,9 @@
                             </div>
                             <a href="{% url 'blog:blog_detail' slug=trends.slug %}"><p> {{trends.blog_title}} </p></a>
                         </div>
-                        <!-- <div class="answer_count_popular_div">
-                            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    {{trends.answer_set.count}} Answers</p>
-                        </div> -->
+                        <div class="answer_count_popular_div">
+                            <p class="views_reply"><i class="fa fa-heart" aria-hidden="true">  {{trends.likes.count}}</i> </p>
+                        </div>
                         <hr>
                     {% endfor %}
                     </div>
@@ -233,20 +252,21 @@
         </div>
     </div>
 </div>
-
 <script>
+    // #####################################
+    // LAZY LOAD IMAGES, USING THE LIBRARIES
+    // #####################################
 
-        // #####################################
-        // LAZY LOAD IMAGES, USING THE LIBRARIES
-        // #####################################
+    let images = document.querySelectorAll('img');
+    new LazyLoad(images, {
+        root: null,
+        rootMargin: '-60px',
+        threshold: 0.5
+    });
+    
 
-        let images = document.querySelectorAll('img');
-        new LazyLoad(images, {
-            root: null,
-            rootMargin: '-60px',
-            threshold: 0.5
-        });
+
 
 </script>
-
 {% endblock %}
+{% block title %}Best Inspirational Blog{% endblock %}

@@ -2,10 +2,73 @@
 
 {% block content %}
 
-<form method="POST" enctype="multipart/form-data">
-{% csrf_token %}
-{{form.as_p}}
-<input type="submit" value="Confirm" class="btn btn-primary">
-</form>
+<style>
+        /* getting ids from page source */
+        #id_blog_title{
+        width: 100%;
+        border-radius: 10px;
+        outline: none;
+    }
+
+    #id_tags{
+        width: 100%;
+        border-radius: 10px;
+        outline: none;
+    }
+
+
+    .blog_button{
+        width: 100%;
+        height: 40px;
+        background: #2d6ff7;
+        color: white;
+        border: none;
+    }
+
+    .blog_button:hover{
+        background: #7c7f85;
+    }
+</style>
+<div class="progress">
+    <div class="bar"></div >
+    <div class="percent">Anshu 0%</div >
+</div>
+<div id="status"></div>
+<div class="container">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Confirm" class="blog_button">
+    </form>
+    {{form.media}}
+
+</div>
+
+<script>
+    $(function() {
+
+var bar = $('.bar');
+var percent = $('.percent');
+var status = $('#status');
+
+$('form').ajaxForm({
+    beforeSend: function() {
+        status.empty();
+        var percentVal = '0%';
+        bar.width(percentVal);
+        percent.html(percentVal);
+    },
+    uploadProgress: function(event, position, total, percentComplete) {
+        var percentVal = percentComplete + '%';
+        bar.width(percentVal);
+        percent.html(percentVal);
+    },
+    complete: function(xhr) {
+        status.html(xhr.responseText);
+    }
+});
+}); 
+</script>
+
 
 {% endblock %}

@@ -1,9 +1,15 @@
 .welcome{
   font-size: 35px;
 }
+html{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 body{
   padding-top: 70px;
+  height: 100%;
 }
 
 .already-registered-message{
@@ -64,6 +70,17 @@ body{
   .signup_main_div{
     width: 100%;
   }
+  footer{
+    position: relative;
+    background: #333333;
+    height: 600px;
+    margin-top: -600px;
+    clear: both;
+  }
+  .mycontent{
+    overflow: auto;
+    padding-bottom: 600px;
+  }
 }
 
 .dropdown-menu-right li a{
@@ -91,3 +108,35 @@ body{
   font-size: 18px; /* Increase font size */
 }
 
+.main_conatiner_base{
+  min-height: 100%;
+}
+
+.mycontent{
+  overflow: auto;
+  padding-bottom: 300px;
+}
+
+footer{
+  position: relative;
+  background: #333333;
+  height: 300px;
+  margin-top: -300px;
+  clear: both;
+}
+
+
+.headings{
+  color: white;
+  
+}
+
+.link-list li{
+  list-style: none;
+  color: #7c7f85;
+}
+
+.link-list li a{
+
+  color: #7c7f85;
+}

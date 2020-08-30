@@ -16,6 +16,7 @@ from django.http import JsonResponse
 from django.db.models import Count
 from notifications.signals import notify
 
+
 from questions_answer.models import Question, Answer, ReportQuestion
 from django.contrib.auth import get_user_model
 from accounts.models import UserProfileInfo
@@ -64,6 +65,17 @@ def LikeView(request, slug):
 
     # return HttpResponseRedirect(reverse('questions_answer:question_detail', args=[str(slug)]))
 
+def mark_answer(request, pk):
+    answer = get_object_or_404(Answer, pk=pk)
+
+    if request.user != answer.questions.user:
+        raise ValidationError("Only Author of the question is allowed to mark the answer")
+    else:
+        answer.questions.answer_set.update(isBestAnswer=False)
+        answer.isBestAnswer = True
+        answer.save()
+    return redirect('questions_answer:question_detail', answer.questions.slug)
+
 def DeleteQuestion(request, pk):
     question = get_object_or_404(Question, pk=pk)
 
@@ -77,12 +89,13 @@ def DeleteQuestion(request, pk):
 
 def delete_answer(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
+    
+    if request.user == answer.user or request.user == answer.questions.user:
+        answer.delete()
 
-
-    if request.user != answer.user:
+    else:
         return Http404()
     
-    answer.delete()
     return redirect('questions_answer:question_detail', slug=answer.questions.slug)
 
 def reportQuestion(request, pk):
@@ -147,11 +160,11 @@ class QuestionsList(ListView):
     model = Question
     template_name = 'index.html' 
     context_object_name = 'questions'
-    paginate_by = 6
+    paginate_by = 8
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        trending_question = Question.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:7]
+        trending_question = Question.objects.order_by('-hit_count_generic__hits')
         context['popular_tags'] = Question.tags.most_common()[:25]
         context['trending_question'] = trending_question
         return context
@@ -253,7 +266,10 @@ class SearchByTagView(ListView):
     model = Question
     template_name = 'question_answer/tag_list.html'
     context_object_name = 'questions'
+    paginate_by = 2
 
     def get_queryset(self, **kwargs):
 
         return Question.objects.filter(tags__slug=self.kwargs['tag'])
+
+

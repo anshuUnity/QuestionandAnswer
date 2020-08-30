@@ -1,8 +1,168 @@
 {% extends 'base.html' %}
+{% load hitcount_tags %}
+
 
 {% block content %}
-{% for blog in blogpost %}
-<p> {{blog.blog_title}} </p>
-{% endfor %}
+
+<style>
+    .content_div{
+        display: flex;
+    }
+
+    .image_div{
+        margin-left: auto;
+    }
+
+    .text_div .title{
+        text-decoration: none;
+        color: #212529;
+    }
+
+    .text_div .timestamp{
+        font-family: "Open Sans", Arial, sans-serif;
+        font-size: 13px;
+        line-height: 22px;
+        color: #212529;
+    }
+
+    .text_div .username{
+        font-size: 15px;
+        line-height: 20px;
+        color: #2d6ff7;
+    }
+
+    .text_div a{
+        font-size: 15px;
+        line-height: 20px;
+        color: #2d6ff7;
+        text-decoration: none;
+    }
+
+    .views_like_comment i{
+        padding-left: 15px;
+        color: #7c7f85;
+        font-size: 13px;
+        line-height: 15px;
+        
+    }
+
+    img {
+        width: 150px;
+        height: 150px;
+        /* margin-left: 50px; */
+    }
+
+    .tag_list{
+        list-style-type: none;
+        overflow: hidden;
+    }
+
+    .tag_list_items{
+        line-height: 30px;
+    }
+
+    .text_div .tag_list li {
+        float: left;
+        padding: 0 2px;
+        margin-top: 5px;
+    }
+
+    .tag_list_items a{
+        padding: 2px 0;
+        border: 1px solid #d1d4cf;
+        border-radius: 2px;
+        font-size: 11px;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 20px;
+    }
+
+    .tag_list_items a{
+        text-decoration: none;
+        color: #7c7f85;
+    }
+
+    .tag_list_items a:hover{
+        background-color: #2d6ff7;
+        color: white;
+        border-radius: 2px;
+        border: 1px solid #2d6ff7;
+        border-radius: 2px;
+    }
+</style>
+<div class="container">
+    <div class="blog_list">
+        {% for blog in blogpost %}
+            <div class="content_div">
+                <div class="text_div">
+                    <a class="title" href="{% url 'blog:blog_detail' slug=blog.slug %}"><h4><strong> {{blog.blog_title}} </strong></h4></a>
+                    <p><a href=" {% url 'accounts:profile_detail' pk=blog.author.userprofileinfo.pk %} ">@{{blog.author.username}}</a></p>
+                    <p class="timestamp"> {{blog.published_date|timesince}} ago</p>
+                    <div class="views_like_comment">
+                        <i class="fa fa-eye" aria-hidden="true">  {% get_hit_count for blog %}</i> 
+                        <i class="fa fa-heart" aria-hidden="true">  {{blog.likes.count}}</i> 
+                        <i class="fa fa-envelope" aria-hidden="true">  3</i>
+                       
+                    </div>
+    
+                    <ul class="tag_list">
+                        {% for tag in blog.tags.all %}
+                        <li class="tag_list_items">
+                            <a href=" {% url 'blog:blog_tag' tag.slug %} ">{{tag}}</a>                
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="image_div">
+                    {% if blog.header_image %}
+                        <img data-src="{{blog.header_image.url}}" alt="">
+                    {% else %}
+                        <img data-src="https://images.pexels.com/photos/636243/pexels-photo-636243.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="">
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+    <div class="pagination_class">
+        {% if is_paginated  %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}"><i class="fa fa-chevron-left"></i></a>
+                    {% endif %}
+
+                    <span class="page-current">
+                        Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    </div>
+    {% block title %}
+    Precious Lyfe
+    {% endblock %}
+    
+    <script>
+    
+        // #####################################
+        // LAZY LOAD IMAGES, USING THE LIBRARIES
+        // #####################################
+    
+        let images = document.querySelectorAll('img');
+        new LazyLoad(images, {
+            root: null,
+            rootMargin: '-60px',
+            threshold: 0.5
+        });
+    </script>
+</div>
+
 
 {% endblock %}
+
+<!-- {% for blog in blogpost %}
+<p> {{blog.blog_title}} </p>
+{% endfor %} -->
