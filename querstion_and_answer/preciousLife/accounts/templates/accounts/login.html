@@ -19,7 +19,8 @@
   <form method="POST">   
       {% csrf_token %}
       {% bootstrap_form form %}
-      <input type="submit" value="Log In" class="signup-button"> 
+      <input type="submit" value="Log In" class="signup-button">
+      <a href=" {% url 'password_reset' %} "><p>Forget credentials?</p></a> 
   </form>
 </div>
 

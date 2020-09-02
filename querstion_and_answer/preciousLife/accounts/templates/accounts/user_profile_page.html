@@ -240,8 +240,8 @@
     <div class="container">
         <div class="row shadow p-3 mb-5 bg-white rounded detail_container">
             <div class="col-xl-6 col-lg-6 col-md-6 image_container image_div">
-                {% if profile_detail.profile_pic %}
-                <img src="{{ profile_detail.profile_pic.url }}" alt="Oops Could not load the image">
+                {% if profile_detail.profile_pic_user %}
+                <img src="{{ profile_detail.profile_pic_user.url }}" alt="Oops Could not load the image">
                 {% else %}
                 <img src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
                 {% endif %}
@@ -276,7 +276,7 @@
     <div class="container container_tab">
         <ul class="tab_navigation">
             <li class="active">Questions</li>
-            <li>Your Blogs</li>
+            <li>Blogs</li>
             {% if request.user == profile_detail.user %}
             <li>Saved Blogs</li>
             {% endif %}
@@ -431,4 +431,5 @@
 </div>
 
 {% endblock %}
+
 

@@ -135,7 +135,10 @@ class BlogDetail(HitCountDetailView, FormMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
+        blog = get_object_or_404(BlogPost, slug = self.kwargs['slug'])
+        related_blog = blog.tags.similar_objects()
         context['comment_form'] = CommentBlogForm
+        context['related_blog'] = related_blog
         return context
     
     def post(self, request, *args, **kwargs):

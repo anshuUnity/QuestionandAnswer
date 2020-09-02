@@ -25,9 +25,9 @@
                 </div>
                 <div class="image_div">
                     {% if blog.header_image %}
-                        <img data-src="{{blog.header_image.url}}" alt="">
+                        <img class="lazy" data-src="{{blog.header_image.url}}" alt="">
                     {% else %}
-                        <img data-src="https://images.pexels.com/photos/636243/pexels-photo-636243.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="">
+                        <img class="lazy" data-src="https://images.pexels.com/photos/636243/pexels-photo-636243.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="">
                     {% endif %}
                 </div>
             </div>

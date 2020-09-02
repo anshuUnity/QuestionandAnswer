@@ -2,15 +2,15 @@
 {% if request.user.is_authenticated %}
 <div class="user_specific_navbar">
     <div class="profile_image_specific_nav">
-        {% if user.userprofileinfo.profile_pic %}
-        <img class="profile_image_specific_nav" src=" {{user.userprofileinfo.profile_pic.url}} " alt="">
+        {% if user.userprofileinfo.profile_pic_user %}
+        <img class="profile_image_specific_nav" src=" {{user.userprofileinfo.profile_pic_user.url}} " alt="">
         {% else %}
         <img class="profile_image_specific_nav" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
         {% endif %}
     </div>
     <div class="navbars_text" style="margin-top:10px">
-        <p><i class="fa fa-home"></i> Home</p>
-        <p><i class="fa fa-user-circle"></i> Profile</p>
+        <a href=" {% url 'home' %} "><p><i class="fa fa-home"></i> Home</p></a>
+        <a href=" {% url 'accounts:profile_detail' pk=user.userprofileinfo.pk%} "><p><i class="fa fa-user-circle"></i> Profile</p></a>
         <a href=" {% url 'notice:notice_list' %} ">
             <p><i class="fa fa-bell"></i> Notification
                 {% notifications_unread as unread_count %}
@@ -27,7 +27,7 @@
             {% endif %}
         </p>
         </a>
-        <p><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Profile</p>
+        <a href=" {% url 'accounts:edit-profile' %} "><p><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Profile</p></a>
     </div>
 </div>
 {% endif %}

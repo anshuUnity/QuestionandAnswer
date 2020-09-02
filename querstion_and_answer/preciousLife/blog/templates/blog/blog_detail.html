@@ -136,6 +136,44 @@
         }
     }
 
+    .related_question{
+        background: white;
+        margin-left: -10px;
+    }
+
+    .related_question p{
+        margin-left: 10px;
+        color: #26333b;
+        font-size: 14px;
+        line-height: 23px;
+    }
+
+    .image_title_div{
+        margin-left: 10px;
+        margin-right: 5px;
+        font-size: 14px;
+        display: flex;
+    }
+
+    .image_title_div p{
+        color: #272930;
+        font-family: "Open Sans", Arial, sans-serif;
+        line-height: 22px;
+        margin-left: 10px;
+    }
+
+    .profile_image_popular{
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .answer_count_popular_div p{
+        margin-left: 30px;
+        margin-top: -10px;
+    }
+
 </style>
 
 <div class="main_container">
@@ -153,7 +191,33 @@
                                 
             </div>
             <div class="col-xl-2 col-lg-3 col-md-3 popular_feed">
-
+                <div class="related_question">
+                    <p><i class="fa fa-question-circle"></i> Related Blogs</p>
+                    <div class="related_question_feed">
+                        {% if related_blog %}
+                        {% for related in related_blog %}
+                        <div class="image_title_div">
+                            <div class="popular_profile_image">
+                                <a href=" {% url 'accounts:profile_detail' pk=related.author.userprofileinfo.pk %} ">
+                                {% if trends.author.userprofileinfo.profile_pic_user %}
+                                <img class="profile_image_popular" src=" {{related.author.userprofileinfo.profile_pic_user.url}} " alt="">
+                                {% else %}
+                                <img class="profile_image_popular" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                                {% endif %}
+                                </a>
+                            </div>
+                            <a href="{% url 'blog:blog_detail' slug=related.slug %}"><p> {{related.blog_title}} </p></a>
+                        </div>
+                        <div class="answer_count_popular_div">
+                            <p class="views_reply"><i class="fa fa-envelope" aria-hidden="true"></i>    {{related.commentblogpost_set.count}} Comment{{related.commentblogpost_set.count|pluralize}}</p>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                    {% else %}
+                    <p>No related Question found</p>
+                    {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

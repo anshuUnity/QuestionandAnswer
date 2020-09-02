@@ -27,8 +27,9 @@
         background: #7c7f85;
     }
 
-    .progress{
-        height: 30px;
+    #id_header_image{
+        border: none;
+        outline: none;
     }
 
 </style>
@@ -41,13 +42,12 @@
     </form>
     
     {{form.media}}
-    <div class="progress">
-        <div class="bar"></div >
-        <div class="percent">Anshu 0%</div >
-    </div>
-    <div id="status"></div>
 </div>
 
-
+<script>
+    $(document).ready(function(){
+        $("#id_header_image").addClass("btn btn-success")
+    });
+</script>
 
 {% endblock  %}

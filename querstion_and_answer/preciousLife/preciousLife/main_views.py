@@ -11,6 +11,18 @@ class ThanksPage(TemplateView):
 class TestPage(TemplateView):
     template_name = 'test.html'
 
+class PrivacyPolicy(TemplateView):
+    template_name = 'policy_files/privacy_policy.html'
+
+class CookiePolicy(TemplateView):
+    template_name = 'policy_files/cookie_policy.html'
+
+class TermsPolicy(TemplateView):
+    template_name = 'policy_files/terms_condition.html'
+
+class AboutView(TemplateView):
+    template_name = 'policy_files/about.html'
+
 def handler404(request, exception):
     return page_not_found(request, exception, '404.html', status=404)
 

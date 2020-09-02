@@ -5,19 +5,27 @@ from django.utils import timezone
 from taggit.managers import TaggableManager
 from hitcount.models import HitCountMixin,HitCount
 from django.contrib.contenttypes.fields import GenericRelation
-
+from django.core.exceptions import ValidationError
 
 from django.contrib.auth import  get_user_model
 # Create your models here.
 
 User = get_user_model()
 
+def validate_file_size(value):
+    filesize= value.size
+    
+    if filesize > 5242880:
+        raise ValidationError("The Image size should be less than 5mb")
+    else:
+        return value
+
 class BlogPost(models.Model, HitCountMixin):
     author                  = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blogpost')
     blog_title              = models.CharField(unique=True, max_length=264, blank=False, null=False)
     slug                    = models.SlugField(max_length=264)
     blog_description        = models.TextField(max_length=None)
-    header_image            = models.ImageField(null=True, blank=True, upload_to='blog_images/')
+    header_image            = models.ImageField(null=True, blank=True, upload_to='blog_images/',validators = [validate_file_size])
     tags                    = TaggableManager(blank=True, help_text='Give tags to the blog')
     published_date          = models.DateTimeField()
     likes                   = models.ManyToManyField(User, related_name='blog_likes', blank=True)

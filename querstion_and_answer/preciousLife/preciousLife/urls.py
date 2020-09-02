@@ -38,6 +38,11 @@ urlpatterns = [
 
     path('summernote/', include('django_summernote.urls')),
 
+    path('privacy-policy/', main_views.PrivacyPolicy.as_view(), name = 'privacy'),
+    path('cookie-policy/', main_views.CookiePolicy.as_view(), name = 'cookie'),
+    path('terms-condition/', main_views.TermsPolicy.as_view(), name = 'terms'),
+    path('about-us/', main_views.AboutView.as_view(), name = 'about'),
+
     path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     # password reset views
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'), 

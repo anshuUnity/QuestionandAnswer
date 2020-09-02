@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -81,7 +82,7 @@
             <div class="col-xl-6 col-lg-6">
                 <h2 class="edit_profile_heading">Edit Your Profile</h2>
                 <div class="container_second_main">
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form action="" method="POST" enctype="multipart/form-data" id="formUpload">
                         {% csrf_token %}
                         {{ form.as_p }}
                         {% for field in form %}
@@ -128,6 +129,8 @@
                 reader.readAsDataURL(file)
             }
         });
+
+        
         
     </script>
 </div>

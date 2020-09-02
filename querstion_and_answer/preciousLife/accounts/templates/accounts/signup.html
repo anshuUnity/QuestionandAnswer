@@ -22,12 +22,20 @@
 
 <div class="container signup_main_div">
   <h1>Sign Up</h1>
+  {% for field in form %}
+  {% for error in field.errors %}
+    <p style="color: red">{{ error }}</p>
+  {% endfor %}
+  {% endfor %}
   <div class="form-sign-up">
     <form method="POST">
       {% csrf_token %}
       
       {{form.as_p}}
+      
       <input type="checkbox" id="myCheck" name="test" required>
+      By clicking signup below I agree to PreciousLyfe's <a href=" {% url 'terms' %} ">Terms and condition, </a><a href="{% url 'privacy' %}">Privacy Policy</a>
+      and <a href=" {% url 'cookie' %} ">Cookie Policy</a>
       <input type="submit" value="Sign Up" class="signup-button">
     </form>  
   </div>

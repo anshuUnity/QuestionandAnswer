@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Count
 from notifications.signals import notify
+from django.core.mail import send_mail
 
 
 from questions_answer.models import Question, Answer, ReportQuestion
@@ -164,7 +165,7 @@ class QuestionsList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        trending_question = Question.objects.order_by('-hit_count_generic__hits')
+        trending_question = Question.objects.order_by('-hit_count_generic__hits')[:10]
         context['popular_tags'] = Question.tags.most_common()[:25]
         context['trending_question'] = trending_question
         return context
@@ -207,6 +208,15 @@ class AnswerFormClass(CreateView):
                 verb=u'has answered your question', 
                 description=form.instance.answer_description, 
                 target=form.instance.questions)
+            message = form.instance.answer_description
+
+            send_mail(
+                'Answered your Question',
+                message,
+                'anshupal258@gmail.com',
+                [form.instance.questions.user.email],
+                fail_silently=False,
+            )
         return super().form_valid(form)
 
     def get_success_url(self):

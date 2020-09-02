@@ -12,6 +12,11 @@ class BlogForm(forms.ModelForm):
             'blog_description': SummernoteWidget
         }
 
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['comment_content'].label = ""
+            self.fields['header_image'].widget.attrs.update({'class' : 'comment_content'})
+
 class CommentBlogForm(forms.ModelForm):
 
     class Meta:
