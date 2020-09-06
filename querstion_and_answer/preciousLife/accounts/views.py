@@ -16,6 +16,11 @@ from accounts.models import UserProfileInfo, ContactForm
 from questions_answer.models import Question, Answer
 from blog.models import BlogPost
 
+import json
+import urllib.request
+from django.conf import settings
+from django.contrib import messages
+
 # Create your views here.
 # ACCOUNTS VIEWS
 
@@ -24,7 +29,28 @@ class SignUp(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'accounts/signup.html'
 
+    def form_valid(self, form):
+        # get the token submitted in the form
+        recaptcha_response = self.request.POST.get('g-recaptcha-response')
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+
+        payload = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+
+        data = urllib.parse.urlencode(payload).encode()
+        req = urllib.request.Request(url, data=data)
         
+        # verify the token submitted with the form is valid
+        response = urllib.request.urlopen(req)
+        result = json.loads(response.read().decode())
+
+        if (not result['success']):  # make sure action matches the one from your template
+            messages.error(self.request, 'Invalid reCAPTCHA. Please try again.')
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
 
 @method_decorator(login_required, name='dispatch')
 class EditProfile(SuccessMessageMixin ,UpdateView):

@@ -11,7 +11,6 @@ import re
 EMAIL_REGEX = r"(^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$)"
 
 class SignUpForm(UserCreationForm):
-    captcha = ReCaptchaField()
 
     class Meta:
         model = get_user_model()
@@ -35,12 +34,10 @@ class SignUpForm(UserCreationForm):
         self.fields['email'].label = ""
         self.fields['password1'].label = ""
         self.fields['password2'].label = ""
-        self.fields['captcha'].label = ""
         self.fields['username'].widget.attrs.update({'class' : 'myfieldclass'})
         self.fields['email'].widget.attrs.update({'class' : 'myfieldclass'})
         self.fields['password1'].widget.attrs.update({'class' : 'myfieldclass'})
         self.fields['password2'].widget.attrs.update({'class' : 'myfieldclass'})
-        self.fields['captcha'].widget.attrs.update({'class' : 'myfieldclass'})
 
         # giving place holders to fields
         self.fields['username'].widget.attrs.update({'placeholder':'Enter Your Username*'})

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 {% load hitcount_tags %}
@@ -184,7 +184,7 @@
                 {% if questions.user.userprofileinfo.profile_pic_user %}
                 <img class="profile_image" src=" {{questions.user.userprofileinfo.profile_pic_user.url}} " alt="">
                 {% else %}
-                <img class="profile_image" src="https://static1.squarespace.com/static/54b7b93ce4b0a3e130d5d232/54e20ebce4b014cdbc3fd71b/5a992947e2c48320418ae5e0/1519987239570/icon.png?format=1500w" alt="">
+                <img class="profile_image" src="{% static 'preciousLife/images/default_profile_pic.png' %}" alt="">
                 {% endif %}
             </a>
             <p class="username">@{{questions.user.username}}</p>

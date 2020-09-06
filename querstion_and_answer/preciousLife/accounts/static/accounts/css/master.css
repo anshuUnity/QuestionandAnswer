@@ -140,3 +140,14 @@ footer{
 
   color: #7c7f85;
 }
+
+.headings img{
+  margin-top: 10px;
+  width: 200px;
+  height: 90px;
+}
+
+.navbar-brand img{
+  height: 30px;
+  width: 100px;
+}

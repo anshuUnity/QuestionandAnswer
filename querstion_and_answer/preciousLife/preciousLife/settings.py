@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'notifications',
     'captcha',
     'django_summernote',
+    'corsheaders',
 
     # my personal app
     'accounts', 
@@ -69,7 +71,7 @@ AUTHENTICATION_BACKENDS = (
 DJANGO_NOTIFICATIONS_CONFIG = { 
     'SOFT_DELETE': True,
 
-    }
+}
 
 GUARDIAN_RAISE_403 = True
 
@@ -133,11 +135,18 @@ SUMMERNOTE_CONFIG = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://rekyndll.com",
+    "http://localhost:8080",
+    "http://127.0.0.1:9000"
 ]
 
 ROOT_URLCONF = 'preciousLife.urls'

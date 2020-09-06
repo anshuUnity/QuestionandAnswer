@@ -6,6 +6,8 @@ from django.utils import timezone
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
+from uuid import uuid4 
+import os
 
 
 from django.contrib.auth import get_user_model
@@ -23,14 +25,26 @@ def validate_file_size(value):
     else:
         return value
 
+def path_and_rename(instance,filename):
+    upload_to = 'question_images'
+    ext = filename.split('.')[-1]
+    # set filename as random string
+    if instance.pk:
+        filename = '{}.{}'.format(instance.pk, ext)
+    else:
+        # set filename as random string
+        filename = '{}.{}'.format(uuid4().hex, ext)
+    return os.path.join(upload_to, filename)        
+
+
 class Question(models.Model, HitCountMixin):
     slug              =models.SlugField(max_length=264)
     title             =models.CharField(max_length=264, blank=False, null=False, unique=True)
     description       =models.TextField(max_length=None, blank=False, null=False)
     published_date    =models.DateTimeField()
-    image_first       =models.ImageField(blank=True, null=True, upload_to = 'question_images',validators = [validate_file_size])
-    image_second      =models.ImageField(blank=True, null=True, upload_to ='question_images', validators = [validate_file_size])
-    image_third       =models.ImageField(blank=True, null=True, upload_to = 'question_images', validators = [validate_file_size])
+    image_first       =models.ImageField(blank=True, null=True, upload_to = path_and_rename,validators = [validate_file_size])
+    image_second      =models.ImageField(blank=True, null=True, upload_to =path_and_rename, validators = [validate_file_size])
+    image_third       =models.ImageField(blank=True, null=True, upload_to = path_and_rename, validators = [validate_file_size])
     user              =models.ForeignKey(User, on_delete=models.CASCADE, related_name='question')
     tags              =TaggableManager(blank=True, help_text='Give the tags to the question')
     likes             =models.ManyToManyField(User, related_name='likes', blank=True)

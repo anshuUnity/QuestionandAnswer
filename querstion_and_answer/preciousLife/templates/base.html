@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+    <script src='https://www.google.com/recaptcha/api.js?render=6Lc7-cAZAAAAAAemZim-De9qA-VbZLfA8eAJHYe1'></script>
     {% block extra_css %}{% endblock %}
     <!-- Order Matters -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -67,7 +68,7 @@
     }
 
     .dropdown-menu{
-        background: #266575;
+        background: #a3e3bb;
     }
 
     .dropdown-menu li a{
@@ -106,7 +107,7 @@
         <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
         <div class="navigationbar">
             <nav class="navbar fixed-top navbar-expand-lg navbar-dark background scrolling-navbar">
-                <a class="navbar-brand" href=" {% url 'home' %} ">Navbar</a>
+                <a class="navbar-brand" href=" {% url 'home' %} "><img src=" {% static 'preciousLife/images/main.png' %} " alt=""></a>
                 <a class="navbar-brand" id="notification" href=" {% url 'notice:notice_list' %} "><i class="fa fa-bell-o" aria-hidden="true"></i>
                     {% if unread_count %}
                     <span class="badge"> {{unread_count}} </span>
@@ -200,7 +201,7 @@
         <div class="container-fluid footer">
             <div class="row">
                 <div class="col-xl-4 col-lg-4">
-                    <h1 class="headings">LOGO</h1>
+                    <h1 class="headings"><img src="{% static 'preciousLife/images/main_footer.png' %}" alt="oops!"></h1>
 
                 </div>
                 <div class="col-xl-4 col-lg-4">
