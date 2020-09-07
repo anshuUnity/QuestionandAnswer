@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'notifications',
     'captcha',
     'django_summernote',
-    'corsheaders',
 
     # my personal app
     'accounts', 
@@ -237,9 +236,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 GOOGLE_RECAPTCHA_SECRET_KEY = '6Lc7-cAZAAAAAMXc-fjq31u1ON_3a6swLbXdK0Dy'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
-EMAIL_HOST_USER = 'anshupal258@gmail.com' # email id
-EMAIL_HOST_PASSWORD = 'Pal@226029' #password
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+SENDGRID_API_KEY = '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'
+
+
+# Toggle sandbox mode (when running in DEBUG mode)
+SENDGRID_SANDBOX_MODE_IN_DEBUG=True
+
+# echo to stdout or any other file-like object that is passed to the backend via the stream kwarg.
+SENDGRID_ECHO_TO_STDOUT=True

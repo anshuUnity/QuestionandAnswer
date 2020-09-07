@@ -17,7 +17,7 @@
                     </div>
 
                     <ul class="tag_list">
-                        {% for tag in blog.tags.all %}
+                        {% for tag in blog.blog_tags.all %}
                         <li class="tag_list_items">
                             <a href=" {% url 'blog:blog_tag' tag.slug %} ">{{tag}}</a>                
                         </li>

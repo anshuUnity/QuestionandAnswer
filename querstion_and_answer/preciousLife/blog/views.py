@@ -104,7 +104,7 @@ class BlogList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         trending_blog = BlogPost.objects.order_by('-hit_count_generic__hits')[:7]
-        context['popular_tags'] = BlogPost.tags.most_common()[:25]
+        context['popular_tags'] = BlogPost.blog_tags.most_common()[:25]
         context['trending_blog'] = trending_blog
         return context
 
@@ -136,7 +136,7 @@ class BlogDetail(HitCountDetailView, FormMixin):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         blog = get_object_or_404(BlogPost, slug = self.kwargs['slug'])
-        related_blog = blog.tags.similar_objects()
+        related_blog = blog.blog_tags.similar_objects()
         context['comment_form'] = CommentBlogForm
         context['related_blog'] = related_blog
         return context
@@ -196,7 +196,7 @@ class BlogSearchView(BlogList):
                 result = BlogPost.objects.filter(
                     Q(blog_description__icontains=q)|
                     Q(blog_title__icontains=q)|
-                    Q(tags__name__icontains=q)
+                    Q(blog_tags__name__icontains=q)
                 ).distinct()
         if not result:
             messages.warning(self.request, 'No Records Found')
@@ -209,4 +209,4 @@ class SearchByTagView(ListView):
     paginate_by = 6
 
     def get_queryset(self, **kwargs):
-        return BlogPost.objects.filter(tags__slug=self.kwargs['tag'])
+        return BlogPost.objects.filter(blog_tags__slug=self.kwargs['tag'])
