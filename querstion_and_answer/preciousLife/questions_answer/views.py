@@ -75,6 +75,7 @@ def mark_answer(request, pk):
         answer.questions.answer_set.update(isBestAnswer=False)
         answer.isBestAnswer = True
         answer.save()
+        messages.success(request, "Answer Marked as best answer", fail_silently=True)
     return redirect('questions_answer:question_detail', answer.questions.slug)
 
 def DeleteQuestion(request, pk):
@@ -85,7 +86,7 @@ def DeleteQuestion(request, pk):
     
     question.delete()
 
-    # messages.success(request, 'Question Deleted Successfully')
+    messages.success(request, 'Question Deleted Successfully', fail_silently=True)
     return redirect('home')
 
 def delete_answer(request, pk):
@@ -97,6 +98,7 @@ def delete_answer(request, pk):
     else:
         return Http404()
     
+    messages.success(request, "Answer Deleted Successfully", fail_silently=True)
     return redirect('questions_answer:question_detail', slug=answer.questions.slug)
 
 def reportQuestion(request, pk):
@@ -116,6 +118,7 @@ def reportQuestion(request, pk):
             new_form.user = request.user
             new_form.question_url = request.session.get('report_url')
             new_form.save()
+            messages.success(request, "Question Reported Successfully", fail_silently=True)
             return redirect('questions_answer:question_detail', slug=question.slug)
 
     else:
@@ -144,6 +147,7 @@ def reportAnswer(request, pk):
             new_form.answers = answer
             new_form.question_url = request.session.get('report_url')
             new_form.save()
+            messages.success(request, "Answer Reported Successfully", fail_silently=True)
             return redirect('questions_answer:question_detail', slug=answer.questions.slug)
 
     else:
@@ -266,7 +270,7 @@ class QuestionSearchView(QuestionsList):
                     Q(description__icontains=q)|
                     Q(title__icontains=q)|
                     Q(tags__name__icontains=q)
-                )
+                ).distinct()
         if not result:
             messages.warning(self.request, 'No Records Found')
         return result

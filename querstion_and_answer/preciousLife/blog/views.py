@@ -15,6 +15,8 @@ from django.template.loader import render_to_string
 from django.views.generic.edit import FormMixin
 from notifications.signals import notify
 
+from accounts.mixin import AjaxFormMixin
+
 # Create your views here.
 
 ######################
@@ -68,6 +70,7 @@ def delete_blog(request, pk):
         return Http404()
     
     blog.delete()
+    messages.success(request, "Blog Deleted Successfully", fail_silently=True)
     return redirect('blog:blog_list')
 
 def delete_comment(request, pk):
@@ -77,6 +80,7 @@ def delete_comment(request, pk):
 
     if request.user == comment.user or request.user == comment.blogpost.author:
         comment.delete()
+        messages.success(request, "Comment Deleted", fail_silently=True)
     else:
         return Http404()
     
@@ -93,7 +97,7 @@ class CreateBlog(CreateView):
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse('home')
+        return reverse('blog:blog_list')
 
 class BlogList(ListView):
     model = BlogPost
@@ -163,6 +167,7 @@ class BlogDetail(HitCountDetailView, FormMixin):
                 target=form.instance.blogpost)
 
         form.save()
+        messages.success(self.request, "Comment added successfully", fail_silently=True)
         return super().form_valid(form)
 
     def get_success_url(self):

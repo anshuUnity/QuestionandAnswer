@@ -12,6 +12,11 @@ import os
 
 from django.contrib.auth import get_user_model
 from accounts.models import UserProfileInfo
+
+from PIL import Image
+from django.core.files import File
+from io import BytesIO
+
 # QUESTION_ANSWER MODELS 
 # Create your models here.
 
@@ -36,6 +41,13 @@ def path_and_rename(instance,filename):
         filename = '{}.{}'.format(uuid4().hex, ext)
     return os.path.join(upload_to, filename)        
 
+def compressImage(image):
+    im = Image.open(image)
+    im_c = im.convert('RGB')
+    im_io = BytesIO()
+    im_c.save(im_io, format='WebP', quality=20)
+    new_image = File(im_io, name=image.name)
+    return new_image
 
 class Question(models.Model, HitCountMixin):
     slug              =models.SlugField(max_length=264)
@@ -64,6 +76,19 @@ class Question(models.Model, HitCountMixin):
         self.slug = slugify(self.title)
         if not self.id:
             self.published_date = timezone.now()
+
+        if self.image_first:
+            new_image1 = compressImage(self.image_first)
+            self.image_first = new_image1
+
+        if self.image_second:
+            new_image2 = compressImage(self.image_second)
+            self.image_second = new_image2
+
+        if self.image_third:
+            new_image3 = compressImage(self.image_third)
+            self.image_third = new_image3            
+
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):

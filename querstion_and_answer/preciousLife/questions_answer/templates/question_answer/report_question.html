@@ -20,19 +20,30 @@
     }
 </style>
 
-<div id="loader_submit"></div>
-
 <form method="POST">
     {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Submit" class="btn btn-primary">
 </form>
-
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Uploading Data....</h5>
+        </div>
+        <div class="modal-body">
+            <div id="loader_submit"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 <script>
-    $(document).ready(function(){
-        $('#loader_submit').hide();
+        $(document).ready(function(){
+        $("#id_header_image").addClass("btn btn-success")
+
         $('form').submit(function(){
-            $('#loader_submit').show();
+            $('#exampleModalCenter').modal().show();
         });
     });
 </script>

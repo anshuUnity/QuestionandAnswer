@@ -1,5 +1,6 @@
 {% load static %}
 {% load hitcount_tags %}
+{% load thumbnail %}
 <div class="question_list_feed">
 
     <div class="profile_username_title_div">
@@ -31,15 +32,15 @@
         <span class="description">{{ question.description|urlizetrunc:35|linebreaks}}</span>
         <div class="question_images_fields">
             {% if question.image_first %}
-                <img class="first-image" src="{{question.image_first.url}}" alt="">
+                <img class="first-image" data-src="{% thumbnail question.image_first '720' as im %}{{im.url}}{% endthumbnail %} " alt=" {{question.title}} ">
             {% endif %}
 
             {% if question.image_second %}
-            <img class="first-image" src="{{question.image_second.url}}" alt="">
+            <img class="first-image" data-src="{% thumbnail question.image_second '720' as im %}{{im.url}}{% endthumbnail %} " alt=" {{question.title}} ">
             {% endif %}
 
             {% if question.image_third %}
-            <img class="first-image" src="{{question.image_third.url}}" alt="">
+            <img class="first-image" data-src="{% thumbnail question.image_third '720' as im %}{{im.url}}{% endthumbnail %} " alt=" {{question.title}} ">
             {% endif %}
         </div>
         

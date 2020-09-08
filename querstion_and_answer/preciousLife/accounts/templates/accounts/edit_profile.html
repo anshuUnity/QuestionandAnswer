@@ -72,7 +72,22 @@
         outline: none;
         background-color: #1c8abd;
     }
+    #loader_submit {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        border-top: 16px solid blue;
+        border-right: 16px solid green;
+        border-bottom: 16px solid red;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+    }
 
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 
 </style>
 
@@ -90,7 +105,7 @@
                                 <p style="color: red">{{ error }}</p>
                             {% endfor %}
                         {% endfor %}
-                        <input type="submit" value="Confirm" class="confirm_button">
+                        <input type="submit" value="Confirm" class="confirm_button".>
                     </form>
                 </div>
             </div>
@@ -106,8 +121,25 @@
 
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Uploading Data....</h5>
+            </div>
+            <div class="modal-body">
+                <div id="loader_submit"></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <script>
+        $('form').submit(function(){
+            $('#exampleModalCenter').modal().show();
+        });
+
         const inputFile = document.getElementById("profile_preview_edit_profile_id");
         const previewContainer = document.getElementById("imagePreview");
         const previewImage = previewContainer.querySelector(".image_preview_image_tag");

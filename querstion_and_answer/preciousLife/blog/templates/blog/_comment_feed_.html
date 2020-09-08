@@ -7,9 +7,9 @@
             <div class="profile_username_div">
                 <a href=" {% url 'accounts:profile_detail' pk=comment.user.userprofileinfo.pk %} ">
                     {% if comment.user.userprofileinfo.profile_pic_user %}
-                    <img class="profile_image" src=" {{comment.user.userprofileinfo.profile_pic_user.url}} " alt="">
+                    <img class="profile_image" data-src=" {{comment.user.userprofileinfo.profile_pic_user.url}} " alt="">
                     {% else %}
-                    <img class="profile_image" src="{% static 'preciousLife/images/default_profile_pic.png' %}" alt="">
+                    <img class="profile_image" data-src="{% static 'preciousLife/images/default_profile_pic.png' %}" alt="">
                     {% endif %}
                 </a>
                 <p class="username">@{{comment.user.username}}</p>

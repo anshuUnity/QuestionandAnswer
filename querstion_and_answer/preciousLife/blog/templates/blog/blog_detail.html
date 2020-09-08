@@ -223,6 +223,18 @@
     </div>
 
     <script>
+
+        // #####################################
+        // LAZY LOAD IMAGES, USING THE LIBRARIES
+        // #####################################
+
+        let images = document.querySelectorAll('img');
+        new LazyLoad(images, {
+            root: null,
+            rootMargin: '-10px',
+            threshold: 0.5
+        });
+
         $(document).ready(function(){
             $("img").addClass("img-responsive");
 

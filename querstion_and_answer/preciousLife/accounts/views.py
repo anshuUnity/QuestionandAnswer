@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import UserProfileInfo, ContactForm
 from questions_answer.models import Question, Answer
 from blog.models import BlogPost
+from accounts.mixin import AjaxFormMixin
 
 import json
 import urllib.request
