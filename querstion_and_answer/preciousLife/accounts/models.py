@@ -4,6 +4,10 @@ from django.urls import reverse
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
+from PIL import Image
+from django.core.files import File
+from io import BytesIO
+
 # Create your models here.
 # ACCOUNTS MODELS
 
@@ -20,6 +24,15 @@ def validate_file_size(value):
         raise ValidationError("The Image size should be less than 5mb")
     else:
         return value
+
+def compressImage(image):
+    im = Image.open(image)
+    im_c = im.convert('RGB')
+    im_io = BytesIO()
+    im_c.save(im_io, format='WebP', quality=60)
+    new_image = File(im_io, name=image.name)
+    return new_image
+
 
 class User(auth.models.User, auth.models.PermissionsMixin):
 
@@ -46,6 +59,13 @@ class UserProfileInfo(models.Model):
 
     def get_absolute_url(self):
         return reverse("home",kwargs={'pk':self.pk})
+
+    def save(self, *args, **kwargs):
+        if self.profile_pic_user:
+            new_image = compressImage(self.profile_pic_user)
+            self.profile_pic_user = new_image
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.user.username

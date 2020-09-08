@@ -8,6 +8,10 @@ from hitcount.models import HitCountMixin,HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 
+from PIL import Image
+from django.core.files import File
+from io import BytesIO
+
 from django.contrib.auth import  get_user_model
 # Create your models here.
 
@@ -20,6 +24,14 @@ def validate_file_size(value):
         raise ValidationError("The Image size should be less than 5mb")
     else:
         return value
+
+def compressImage(image):
+    im = Image.open(image)
+    im_c = im.convert('RGB')
+    im_io = BytesIO()
+    im_c.save(im_io, format='WebP', quality=20)
+    new_image = File(im_io, name=image.name)
+    return new_image
 
 class TaggedBlog(TaggedItemBase):
     content_object = models.ForeignKey('BlogPost', on_delete=models.CASCADE)
@@ -49,6 +61,11 @@ class BlogPost(models.Model, HitCountMixin):
 
         if not self.id:
             self.published_date = timezone.now()
+
+        if self.header_image:
+            new_image = compressImage(self.header_image)
+            self.header_image = new_image
+
         super().save(*args, **kwargs)
 
     def total_likes(self):

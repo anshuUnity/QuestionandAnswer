@@ -85,7 +85,7 @@ class Answer(models.Model):
         
 class ReportQuestion(models.Model):
     questions               = models.ForeignKey(Question, on_delete=models.CASCADE)
-    report_description      = models.TextField(blank=True, null=True, max_length=264)
+    report_description      = models.TextField(blank=False, null=False, max_length=264)
     user                    = models.ForeignKey(User, on_delete=models.CASCADE)
     question_url            = models.URLField(null=True, blank=True)
 
@@ -94,7 +94,7 @@ class ReportQuestion(models.Model):
 
 class ReportAnswer(models.Model):
     questions               = models.ForeignKey(Question, on_delete=models.CASCADE)
-    report_description      = models.TextField(blank=True, null=True, max_length=264)
+    report_description      = models.TextField(blank=False, null=False, max_length=264)
     answers                 = models.ForeignKey(Answer, on_delete=models.CASCADE)
     user                    = models.ForeignKey(User, on_delete=models.CASCADE)
     question_url            = models.URLField(null=True, blank=True)

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'notifications',
     'captcha',
     'django_summernote',
+    'sorl.thumbnail',
 
     # my personal app
     'accounts', 

@@ -1,11 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    #loader_submit {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        border-top: 16px solid blue;
+        border-right: 16px solid green;
+        border-bottom: 16px solid red;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<div id="loader_submit"></div>
 
 <form method="POST">
     {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Submit" class="btn btn-primary">
 </form>
+
+<script>
+    $(document).ready(function(){
+        $('#loader_submit').hide();
+        $('form').submit(function(){
+            $('#loader_submit').show();
+        });
+    });
+</script>
 
 {% endblock %}
