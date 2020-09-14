@@ -13,7 +13,7 @@
                     <div class="views_like_comment">
                         <i class="fa fa-eye" aria-hidden="true">  {% get_hit_count for blog %}</i> 
                         <i class="fa fa-heart" aria-hidden="true">  {{blog.likes.count}}</i> 
-                        <i class="fa fa-envelope" aria-hidden="true">  3</i>
+                        <i class="fa fa-envelope" aria-hidden="true">  {{blog.commentblogpost_set.count}}</i>
                        
                     </div>
 

@@ -1,11 +1,17 @@
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Answered</title>
 </head>
+
 <body>
-    <h2> {{username}} has Answered your question</h2>
-    <p>{{subject}}</p>
+    <img src="https://sgp1.digitaloceanspaces.com/rekyndll-space/rekyndll-static/mysite/images/main.png?AWSAccessKeyId=X7VJU2W4EHPTXJIYSIAQ&Signature=hXM92ah%2B4A%2FbfIW04ZteNMlVRZ8%3D&Expires=1599633167" alt="{{username}}">
+    <h2> "@{{username}}" has Answered your question</h2>
+    <h4>Answer:</h4>
+    <p>{{answer}}</p>
+    <p>Visit <a href="https://rekyndll.com/">Site</a></p>
+    <p>Rekyndll team</p>
 </body>
 </html>

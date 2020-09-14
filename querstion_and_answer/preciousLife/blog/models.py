@@ -7,6 +7,7 @@ from taggit.models import TaggedItemBase
 from hitcount.models import HitCountMixin,HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
+import django_summernote
 
 from PIL import Image
 from django.core.files import File
@@ -29,7 +30,7 @@ def compressImage(image):
     im = Image.open(image)
     im_c = im.convert('RGB')
     im_io = BytesIO()
-    im_c.save(im_io, format='WebP', quality=20)
+    im_c.save(im_io, format='jpeg', quality=60)
     new_image = File(im_io, name=image.name)
     return new_image
 

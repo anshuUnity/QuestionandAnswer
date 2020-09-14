@@ -16,12 +16,13 @@ from django.http import JsonResponse
 from django.db.models import Count
 from notifications.signals import notify
 from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 
 from questions_answer.models import Question, Answer, ReportQuestion
 from django.contrib.auth import get_user_model
 from accounts.models import UserProfileInfo
-from django.forms import modelformset_factory
 
 User = get_user_model()
 
@@ -212,15 +213,28 @@ class AnswerFormClass(CreateView):
                 verb=u'has answered your question', 
                 description=form.instance.answer_description, 
                 target=form.instance.questions)
-            message = form.instance.answer_description
 
-            send_mail(
-                'Answered your Question',
-                message,
-                'anshupal258@gmail.com',
-                [form.instance.questions.user.email],
-                fail_silently=False,
-            )
+            plainText = get_template('question_answer/custom_email.txt')
+            htmly = get_template('question_answer/custom_email.html')
+
+            context = {
+                'username':form.instance.user,
+                'answer': form.instance.answer_description
+            }
+            subject, from_mail, to = 'Answered your Question', 'anshupal258@gmail.com', form.instance.questions.user.email
+            text_content = plainText.render(context)
+            html_content = htmly.render(context)
+            msg = EmailMultiAlternatives(subject, text_content, from_mail, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send(fail_silently=False)
+
+            # send_mail(
+            #     'Answered your Question',
+            #     message,
+            #     'anshupal258@gmail.com',
+            #     [form.instance.questions.user.email],
+            #     fail_silently=False,
+            # )
         return super().form_valid(form)
 
     def get_success_url(self):

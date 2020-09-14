@@ -15,6 +15,9 @@ from django.template.loader import render_to_string
 from django.views.generic.edit import FormMixin
 from notifications.signals import notify
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+
 from accounts.mixin import AjaxFormMixin
 
 # Create your views here.
@@ -165,6 +168,22 @@ class BlogDetail(HitCountDetailView, FormMixin):
                 verb=u'Commented on your blog',
                 description=form.instance.comment_content,
                 target=form.instance.blogpost)
+
+
+            plainText = get_template('blog/custom_email.txt')
+            htmly = get_template('blog/custom_email.html')
+
+            context = {
+                'username':form.instance.user,
+                'comment': form.instance.comment_content
+            }
+            subject, from_mail, to = 'Comment On a Blog', 'anshupal258@gmail.com', form.instance.blogpost.author.email
+            text_content = plainText.render(context)
+            html_content = htmly.render(context)
+            msg = EmailMultiAlternatives(subject, text_content, from_mail, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send(fail_silently=False)
+
 
         form.save()
         messages.success(self.request, "Comment added successfully", fail_silently=True)
