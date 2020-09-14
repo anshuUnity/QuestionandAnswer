@@ -98,6 +98,31 @@
 </style>
 
 <body class="body_tag">
+
+    
+    <!-- bottom navigation -->
+    <div class="nav-bottom" id="bottom_nav">
+        <a class="nav__link active" id="nav__link" href=" {% url 'home' %} ">
+            <i class="fa fa-home nav__icon"></i>
+        </a>
+        <a class="nav__link active" id="nav__link" href=" {% url 'blog:blog_list' %} ">
+            <i class="fa fa-rss-square nav__icon"></i>
+        </a>
+        <a class="nav__link" id="nav__link" href="#" data-toggle="modal" data-target="#fullHeightModalRight">
+            <i class="fa fa-plus-square-o nav__icon"></i>
+        </a>
+        <a class="nav__link" id="nav__link" href=" {% url 'notice:notice_list' %} ">
+            {% notifications_unread as unread_count %}
+            {% if unread_count %}
+            <i class="fa fa-circle" aria-hidden="true"></i>
+            {% endif %}
+            <i class="fa fa-bell-o nav__icon"></i>
+        </a>
+        <a class="nav__link" id="nav__link" href=" {% url 'accounts:profile_detail' pk=user.userprofileinfo.pk %} ">
+            <i class="fa fa-user-o nav__icon"></i>
+        </a>
+    </div>
+
     <!-- scroll to top button -->
     <div class="main_conatiner_base">
         <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
@@ -260,8 +285,43 @@
                 return false;
             });
 
+            $(document).ready(function(){
+                $('.nav-bottom a').click(function(event){
+                    $('.nav-bottom a').removeClass('active');
+                    $(this).addClass('active');
+                });
+            });
+
         });        
     </script>
 
+
+
+  <!-- Full Height Modal Right -->
+  <div class="modal fade bottom" id="fullHeightModalRight" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+
+    <!-- Add class .modal-full-height and then add class .modal-right (or other classes from list above) to set a position to the modal -->
+    <div class="modal-dialog modal-full-height modal-bottom" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <a href="{% url 'questions_answer:create' %}" class="post__modal_icon">
+                <i class="fa fa-picture-o  white-text"></i> <span class="font-weight-bold white-text">Post</span>
+              </a>
+            </div>
+
+            <div class="col-md-6 text-center">
+              <a href=" {% url 'blog:create_blog' %} " class="post__modal_icon">
+                  <i class="fa fa-rss-square  white-text"></i> <span class="font-weight-bold white-text">Blog</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Full Height Modal Right -->
 </body>
 </html>

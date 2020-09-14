@@ -89,3 +89,12 @@ class CommentBlogPost(models.Model):
 
     class Meta:
         ordering = ['-published_date']
+
+class CustomAttachment(django_summernote.models.AbstractAttachment):
+    
+    def save(self, *args, **kwargs):
+        if self.file:
+            new_file = compressImage(self.file)
+            self.file = new_file
+        
+        super().save(*args, **kwargs)

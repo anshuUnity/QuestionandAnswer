@@ -129,7 +129,9 @@ SUMMERNOTE_CONFIG = {
         'fontSizeUnits': ['px', 'pt']
         
     },
-    'disable_attachment': True,
+
+    'attachment_model':'blog.CustomAttachment',
+    'attachment_filesize_limit': 2000 * 2000
 
 }
 
