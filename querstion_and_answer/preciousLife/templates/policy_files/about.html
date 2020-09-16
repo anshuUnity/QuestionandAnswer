@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cache %}
 {% block title %}
 About Us
 {% endblock %}
@@ -17,9 +18,11 @@ About Us
     }
 </style>
 <div class="container-fluid">
+    {% cache 60 question_detail %}
     <div class="image-header">
         <img src="{% static 'preciousLife/images/header_abouts.jpg' %}" alt="sorry could not load">
     </div>
+    {% endcache %}
     <div class="container">
         <div class="row">
             <div class="col-xl-2"></div>
