@@ -104,6 +104,7 @@ class Answer(models.Model):
     published_at            = models.DateTimeField(auto_now_add=True)
     user                    = models.ForeignKey(User, on_delete=models.CASCADE)
     isBestAnswer            = models.BooleanField(default=False)
+    answer_likes            = models.ManyToManyField(User, blank=True, related_name='answer_likes')
 
     def __str__(self):
         return self.answer_description

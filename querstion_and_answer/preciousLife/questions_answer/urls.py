@@ -11,6 +11,7 @@ urlpatterns = [
     path('search/', views.QuestionSearchView.as_view(), name='qa_search'),
     path('tag/<tag>/', views.SearchByTagView.as_view(), name='qa_tag'),
     path('likes/<slug>/', views.LikeView, name='likes'),
+    path('like/answer/', views.likeAnswer, name='answer_like'),
     path('update/<int:pk>/question/', views.QuestionUpdateView.as_view(), name='update_qa'),
     path('delete/question/<int:pk>', views.DeleteQuestion, name='qa_question_delete'),
     path('edit/<int:pk>/answer/', views.AnswerUpdateView.as_view(), name='qa_answer_update'),
