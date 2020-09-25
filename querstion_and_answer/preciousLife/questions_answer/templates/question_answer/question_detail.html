@@ -177,10 +177,6 @@
         margin-left: auto;
     }
 
-    .dislike{
-        color: red;
-    }
-
     .like_form_counts p{
         font-family: Roboto, Arial, sans-serif;
         font-size: 13px;
@@ -286,10 +282,15 @@
         }
 
         .first-image{
-        width: 100px;
-        height: 100px;
-        padding: 1px;
+            width: 100px;
+            height: 100px;
+            padding: 1px;
         }
+    }
+
+    .answer_like{
+        font-size: 13px;
+
     }
 </style>
 
@@ -376,13 +377,36 @@
             $(document).on('click', '#like_answer', function(event){
                 event.preventDefault();
                 var pk = $(this).attr('value');
+                const likeText = $(`.like${pk}`).text();
+                const trim = $.trim(likeText)
+
+                let res;
+                const like_count = $(`.like_count_anser${pk}`).text();
+                const trimCount = parseInt(like_count);
                 $.ajax({
                     type: 'POST',
                     url: '{% url "questions_answer:answer_like" %}',
                     data:{'answer_id':pk, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
                     dataType:'json',
                     success:function(response){
-                        setInterval('location.reload()', 1000); 
+                        // if(trim === "Dislike"){
+                        //     $(`.like${pk}`).text("Like");
+                        //     // res = trimCount - 1;
+                        // }else{
+                        //     $(`.like${pk}`).text("Dislike");
+                        //     // res = trimCount + 1;
+                        // }
+
+                        if(response['isLiked']){
+                            $(`.like${pk}`).find('i').removeClass('fa-heart-o');
+                            $(`.like${pk}`).find('i').addClass('fa-heart');
+                        }else{
+                            $(`.like${pk}`).find('i').removeClass('fa-heart');
+                            $(`.like${pk}`).find('i').addClass('fa-heart-o');
+                        }
+
+                        $(`.like_count_anser${pk}`).text(response['total_likes'] + " Likes");
+                        
                     },
                     error:function(rs, e){
 

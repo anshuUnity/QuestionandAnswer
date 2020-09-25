@@ -2,10 +2,16 @@
     <form method="POST" action=" {% url 'questions_answer:answer_like' %} ">
         {% csrf_token %}
         {% if request.user in answers.answer_likes.all %}
-            <button class="views_reply dislike" id="like_answer" type="submit" name="answer_id" value="{{ answers.id }}"><i class="fa fa-heart"></i></button>
+            <button class="answer_like dislike like{{answers.id}} btn btn-outline-success btn-sm" id="like_answer" type="submit" name="answer_id" value="{{ answers.id }}">
+                <i class="fa fa-heart"></i>
+            </button>
         {% else %}
-            <button class="views_reply dislike" id="like_answer" type="submit" name="answer_id" value="{{ answers.id }}"><i class="fa fa-heart-o"></i></button>
+            <button class="answer_like dislike like{{answers.id}} btn btn-outline-success btn-sm" id="like_answer" type="submit" name="answer_id" value="{{ answers.id }}">
+                <i class="fa fa-heart-o"></i>
+            </button>
         {% endif %}
+
+        
     </form>
-    <p id="reload_ajax_div"> {{answers.answer_likes.count}} Like{{answers.answer_likes.count|pluralize}}</p>
+    <p class="like_count_anser{{ answers.id }}" id="reload_ajax_div"> {{answers.answer_likes.count}} Like{{answers.answer_likes.count|pluralize}}</p>
 </div>

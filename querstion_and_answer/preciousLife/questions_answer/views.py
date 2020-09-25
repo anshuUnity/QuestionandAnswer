@@ -69,18 +69,22 @@ def LikeView(request, slug):
 
 def likeAnswer(request):
     answer = get_object_or_404(Answer, id = request.POST.get('answer_id'))
+    isLiked = False
 
     if answer.answer_likes.filter(id = request.user.id).exists():
         answer.answer_likes.remove(request.user)
+        isLiked = False
         message = 'Answer disliked'
 
     else:
         answer.answer_likes.add(request.user)
+        isLiked = True
         message = 'Answer liked'
 
     response = {
         'message':message,
         'total_likes':answer.answer_likes.count(),
+        'isLiked':isLiked
     }
 
     # return redirect('questions_answer:question_detail', answer.questions.slug)
