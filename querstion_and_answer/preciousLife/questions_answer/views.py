@@ -41,7 +41,7 @@ class CreateQuestion(CreateView):
 
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('home')
+        return reverse('questions_answer:questions')
 
 @login_required
 def LikeView(request, slug):
@@ -111,7 +111,7 @@ def DeleteQuestion(request, pk):
     question.delete()
 
     messages.success(request, 'Question Deleted Successfully', fail_silently=True)
-    return redirect('home')
+    return redirect('questions_answer:questions')
 
 def delete_answer(request, pk):
     answer = get_object_or_404(Answer, pk=pk)

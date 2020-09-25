@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from preciousLife import main_views
 from questions_answer import views
+from blog import views as blog_views
 from django.contrib.auth import views as auth_views
 
 from preciousLife import settings
@@ -25,7 +26,7 @@ import notifications.urls
 
 urlpatterns = [
     path('preciousLyfeAdministration/', admin.site.urls),
-    path('', views.QuestionsList.as_view(), name='home'),
+    path('', blog_views.BlogList.as_view(), name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('test/', main_views.TestPage.as_view(), name='test'),

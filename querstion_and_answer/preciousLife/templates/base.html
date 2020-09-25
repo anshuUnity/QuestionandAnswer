@@ -101,7 +101,7 @@
         <a class="nav__link active" id="nav__link" href=" {% url 'home' %} ">
             <i class="fa fa-home nav__icon"></i>
         </a>
-        <a class="nav__link" id="nav__link" href=" {% url 'blog:blog_list' %} ">
+        <a class="nav__link" id="nav__link" href=" {% url 'questions_answer:questions' %} ">
             <i class="fa fa-rss-square nav__icon"></i>
         </a>
         <a class="nav__link" id="nav__link" href="#" data-toggle="modal" data-target="#fullHeightModalRight">
@@ -146,7 +146,7 @@
                                 <a class="nav-link" href="#">About Us</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href=" {% url 'blog:blog_list' %} ">Blogs</a>
+                                <a class="nav-link" href=" {% url 'questions_answer:questions' %} ">Questions</a>
                             </li>
                             <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'questions_answer:qa_search' %}">
                                 <input class="form-control mr-sm-2" type="search" placeholder="Search for question" aria-label="Search" name="q">
@@ -158,7 +158,7 @@
                                 <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href=" {% url 'blog:blog_list' %} ">Blogs</a>
+                                <a class="nav-link" href=" {% url 'questions_answer:questions' %} ">Questions</a>
                             </li>
 
                             <li class="nav-item">

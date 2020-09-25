@@ -13,6 +13,7 @@
                 {% endif %}
             </a>
             <p class="username">@{{answers.user.username}}</p>
+            
             {% if answers.isBestAnswer %}
             <p class="username" 
                 style="margin-left:auto; background: #f30202; color: white; height: 20px; font-family: Open Sans, Arial, sans-serif; font-size: 14px;">
@@ -40,7 +41,10 @@
             </div>
             
         </div>
+        
     </div>
+
+    
     <div class="answer_published_div">
         <p class="date_answer">Answer added on: {{answers.published_at}}</p>
     </div>

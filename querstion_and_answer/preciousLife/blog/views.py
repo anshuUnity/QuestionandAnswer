@@ -74,7 +74,7 @@ def delete_blog(request, pk):
     
     blog.delete()
     messages.success(request, "Blog Deleted Successfully", fail_silently=True)
-    return redirect('blog:blog_list')
+    return redirect('home')
 
 def delete_comment(request, pk):
     comment = get_object_or_404(CommentBlogPost, pk=pk)
@@ -100,7 +100,7 @@ class CreateBlog(CreateView):
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse('blog:blog_list')
+        return reverse('home')
 
 class BlogList(ListView):
     model = BlogPost
