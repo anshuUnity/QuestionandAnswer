@@ -42,6 +42,10 @@
             <span class="description">{{ comment.comment_content|linebreaks|urlizetrunc:35}}</span>
     
         </div>
+
+        <div class="like_comment{{comment.id}} like_section_comment ">
+            {% include 'blog/_like_comment_.html' %}
+        </div>
     </div>
 
     <hr>

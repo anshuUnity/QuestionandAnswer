@@ -83,6 +83,7 @@ class CommentBlogPost(models.Model):
     comment_content = models.TextField(blank=False, null=False)
     blogpost        = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
     published_date  = models.DateTimeField(auto_now_add=True)
+    comment_like   = models.ManyToManyField(User, blank=True, related_name='comment_likes')
 
     def __str__(self):
         return self.comment_content

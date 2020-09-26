@@ -389,13 +389,6 @@
                     data:{'answer_id':pk, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
                     dataType:'json',
                     success:function(response){
-                        // if(trim === "Dislike"){
-                        //     $(`.like${pk}`).text("Like");
-                        //     // res = trimCount - 1;
-                        // }else{
-                        //     $(`.like${pk}`).text("Dislike");
-                        //     // res = trimCount + 1;
-                        // }
 
                         if(response['isLiked']){
                             $(`.like${pk}`).find('i').removeClass('fa-heart-o');

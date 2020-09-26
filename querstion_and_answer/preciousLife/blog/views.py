@@ -64,6 +64,28 @@ def save_blog(request, slug):
         html = render_to_string('blog/_save_blog_feed_.html', context, request=request)
         return JsonResponse({'form':html})
 
+@login_required
+def like_comment(request):
+    comment = get_object_or_404(CommentBlogPost, id = request.POST.get('comment_id'))
+
+    if comment.comment_like.filter(id=request.user.id).exists():
+        comment.comment_like.remove(request.user)
+        message = 'comment Disliked'
+
+    else:
+        comment.comment_like.add(request.user)
+        message = 'comment Liked'
+
+    response = {
+        'comment':comment,
+        'message': message,
+    }
+
+    # return redirect('blog:blog_detail', slug = comment.blogpost.slug)
+    if request.is_ajax():
+        htmly = render_to_string('blog/_like_comment_.html', response, request=request)
+        return JsonResponse({'formly':htmly})
+
 def delete_blog(request, pk):
     blog = get_object_or_404(BlogPost, pk=pk)
 

@@ -175,6 +175,10 @@
         margin-top: -10px;
     }
 
+    .like_section_comment{
+        margin-left: 10px;
+    }
+
 </style>
 
 <div class="main_container">
@@ -286,6 +290,26 @@
                     error:function(rs, e){
                         console.log(rs.responseText);
                     },
+                });
+            });
+        });
+
+        $(document).ready(function(event){
+            $(document).on('click', '#like_comment', function(event){
+                event.preventDefault();
+                var pk = $(this).attr('value');
+                
+                $.ajax({
+                    type:'POST',
+                    url:'{% url "blog:likes_comment" %}',
+                    data:{'comment_id':pk, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
+                    dataType:'json',
+                    success:function(response){
+                        $(`.like_comment${pk}`).html(response['formly']);
+                    },
+                    error:function(e, rs){
+
+                    }
                 });
             });
         });

@@ -12,6 +12,7 @@ urlpatterns = [
     path('update/<int:pk>/blog/', views.BlogUpdateView.as_view(), name = 'blog_update'),
     path('delete/<int:pk>/blog/', views.delete_blog, name = 'blog_delete'),
     path('likes/<slug>/', views.like_blog, name = 'likes'),
+    path('like/comment/', views.like_comment, name = 'likes_comment'),
     path('favorite/<slug>/', views.save_blog, name= 'save_blog'),
     path('edit/<int:pk>/comment/', views.EditCommentBlog.as_view(), name='edit_blog_comment'),
     path('delete/<int:pk>/comment', views.delete_comment, name = 'delete_blog_comment')
