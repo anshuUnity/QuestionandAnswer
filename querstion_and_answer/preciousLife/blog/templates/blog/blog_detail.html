@@ -313,6 +313,27 @@
                 });
             });
         });
+
+        $(document).ready(function(event){
+            $(document).on('submit', '#comment_form', function(event){
+                event.preventDefault();
+                console.log($(this).serialize());
+                $.ajax({
+                    type:'POST',
+                    url:'{% url "blog:blog_detail" blogpost.slug %}',
+                    data:$(this).serialize(),
+                    dataType:'json',
+                    success:function(response){
+                        alert("comment posted");
+                        $('#main_comment_section').html(response['formly']);
+                        $('textarea').val('');
+                    },
+                    error:function(rs, e){
+
+                    },
+                });
+            });
+        });
     </script>
 </div>
 

@@ -1,7 +1,7 @@
 {% load static %}
 <div class="answer_feed">
-    {% if blogpost.commentblogpost_set.all %}
-    {% for comment in blogpost.commentblogpost_set.all %}
+    {% if comments %}
+    {% for comment in comments %}
     <div class="single_comment_div">
         <div class="profile_username_title_div">
             <div class="profile_username_div">
@@ -74,4 +74,10 @@
     {% else %}
     <p>No Comments yet</p>
     {% endif %}
+
+    <form method="POST" id="comment_form" style="margin-bottom: 10px;">
+        {% csrf_token %}
+        {{comment_form.as_p}}
+        <input type="submit" value="Post a comment" class="comment_post_btn">
+    </form>
 </div>

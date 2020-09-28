@@ -18,6 +18,7 @@ from blog.models import BlogPost
 from accounts.mixin import AjaxFormMixin
 
 import json
+from django.http import JsonResponse
 import urllib.request
 from django.conf import settings
 from django.contrib import messages
@@ -52,6 +53,15 @@ class SignUp(CreateView):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+def checkUsername(request):
+    username = request.GET.get('username', None)
+
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+
+    return JsonResponse(data)
 
 @method_decorator(login_required, name='dispatch')
 class EditProfile(SuccessMessageMixin ,UpdateView):

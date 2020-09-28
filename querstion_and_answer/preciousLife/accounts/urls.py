@@ -10,5 +10,6 @@ urlpatterns = [
     path('register/', views.SignUp.as_view(), name='register'),
     path('edit/profile/', views.EditProfile.as_view(), name = 'edit-profile'),
     path('profile/detail/<int:pk>', views.ProfileDetail.as_view(), name = 'profile_detail'),
-    path('contact/', views.ContactView.as_view(), name = 'contact')
+    path('contact/', views.ContactView.as_view(), name = 'contact'),
+    path('validate/username/', views.checkUsername, name = 'check_username'),
 ]

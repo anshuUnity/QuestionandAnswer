@@ -3,14 +3,6 @@
 {% block content %}
 
 <style>
-  body{
-    background: url("{% static 'preciousLife/images/positive_vibes.jpg' %}") no-repeat center center fixed;
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    margin-left: auto;
-  }
 
 </style>
 
@@ -19,6 +11,8 @@
 <h2 class="already-registered-message">You are already registered</h2>
 
 {% else %}
+
+<div id="snackbar">Username is already taken</div>
 
 <div class="container signup_main_div">
   <h1>Sign Up</h1>
@@ -48,6 +42,29 @@
       var x = document.getElementById("myCheck").required;
       document.getElementById("demo").innerHTML = x;
     }
+
+    $('#id_username').change(function(){
+      var username = $(this).val();
+      console.log(username);
+      $.ajax({
+        url:'{% url "accounts:check_username" %}',
+        data: {
+          'username':username
+        },
+        dataType:'json',
+        success:function(response){
+          if(response.is_taken){
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+          }
+        },
+        error:function(e, rs){
+
+        },
+
+      });
+    });
     </script>
 </div>
 

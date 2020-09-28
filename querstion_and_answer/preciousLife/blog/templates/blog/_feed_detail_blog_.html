@@ -48,12 +48,7 @@
         <span> {{blogpost.blog_description|safe}} </span>
     </div>
     <h4><strong>Comments</strong></h4>
-    <div class="include_comment">
+    <div class="include_comment" id="main_comment_section">
         {% include 'blog/_comment_feed_.html' %}
     </div>
-    <form method="POST" style="margin-bottom: 10px;">
-        {% csrf_token %}
-        {{comment_form.as_p}}
-        <input type="submit" value="Post a comment" class="comment_post_btn">
-    </form>
 </div>

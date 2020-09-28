@@ -166,8 +166,10 @@ class BlogDetail(HitCountDetailView, FormMixin):
         context = super().get_context_data(**kwargs)
         blog = get_object_or_404(BlogPost, slug = self.kwargs['slug'])
         related_blog = blog.blog_tags.similar_objects()
+        comments = CommentBlogPost.objects.filter(blogpost=self.object)
         context['comment_form'] = CommentBlogForm
         context['related_blog'] = related_blog
+        context['comments'] = comments
         return context
     
     def post(self, request, *args, **kwargs):
@@ -208,8 +210,15 @@ class BlogDetail(HitCountDetailView, FormMixin):
 
 
         form.save()
-        messages.success(self.request, "Comment added successfully", fail_silently=True)
-        return super().form_valid(form)
+        response = {
+            'message':'Form Submitted Successfully',
+            'comments':CommentBlogPost.objects.filter(blogpost=self.object),
+            'comment_form':form,
+        }
+        # messages.success(self.request, "Comment added successfully", fail_silently=True)
+        if self.request.is_ajax():
+            htmly = render_to_string('blog/_comment_feed_.html', context=response, request=self.request)
+            return JsonResponse({'formly':htmly})
 
     def get_success_url(self):
         return reverse('blog:blog_detail', kwargs={'slug': self.object.slug})
